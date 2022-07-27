@@ -1,7 +1,8 @@
 import { FormEvent, useRef } from "react";
+import { useAuth } from "../hooks/useAuth";
 import { supabase } from "../utils/supabase";
 export default function Login() {
-  const session = supabase.auth.session();
+  const { user } = useAuth()
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
 
@@ -9,6 +10,12 @@ export default function Login() {
     evt.preventDefault();
     const email = emailInputRef.current?.value;
     const password = passwordInputRef.current?.value;
+
+    if (!email) {
+      emailInputRef.current?.focus()
+      return
+    }
+
     console.log(emailInputRef.current?.value);
     console.log(passwordInputRef.current?.value);
 
@@ -23,7 +30,6 @@ export default function Login() {
   async function signOut() {
     const { error } = await supabase.auth.signOut();
     console.log(error);
-    console.log(session?.access_token);
   }
   // async function signUp(params: FormEvent) {
   //   const { user, error } = await supabase.auth.signUp({
@@ -32,28 +38,25 @@ export default function Login() {
   //   });
   // }
   return (
-    <main className="bg-gray-700">
-      {session?.access_token !== undefined && (
+    <main>
+      {user ? (
         <div className="login">
           <section className="container">
             <h1>Deseja sair?</h1>
             <button onClick={signOut}>Log Out</button>
           </section>
         </div>
-      )}
-      {session?.access_token === undefined && (
+      ) : (
         <div className="login">
           <section className="container">
             <h1>Login</h1>
-            <div>
-              <form onSubmit={signIn} className="form">
+            <form onSubmit={signIn} className="form">
                 <label htmlFor="userEmail">Email:</label>
                 <input type="text" ref={emailInputRef} />
                 <label htmlFor="userPassword">Senha</label>
                 <input type="password" ref={passwordInputRef} />
                 <button type="submit">LogIn</button>
               </form>
-            </div>
           </section>
         </div>
       )}
