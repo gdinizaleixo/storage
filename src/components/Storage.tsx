@@ -6,7 +6,7 @@ export default function Storage() {
   const productNameRef = useRef<HTMLInputElement>(null);
   const productQuantityRef = useRef<HTMLInputElement>(null);
 
-  async function addProduct(e: FormEvent) {
+  async function insertProduct(e: FormEvent) {
     e.preventDefault();
     const productName = productNameRef.current?.value;
     const productQuantity = productQuantityRef.current?.value;
@@ -28,19 +28,29 @@ export default function Storage() {
       .insert([{ product_name: productName, product_quantity: productQuantity }]);
     console.log(error);
   }
+  async function selectProduct() {
+    const { data, error } = await supabase.from("product").select();
+  }
 
   return (
-    <main className="flex justify-center">
-      <section className="flex flex-col gap-10">
-        <h1 className="text-3xl">Adicione um produto</h1>
-        <form onSubmit={addProduct} className="flex justify-center flex-col gap-3">
-          <label>Nome:</label>
-          <input type="text" ref={productNameRef} />
-          <label>Quantidade:</label>
-          <input type="number" ref={productQuantityRef} />
-          <button type="submit">Adicionar</button>
-        </form>
-      </section>
+    <main>
+      <div className="flex justify-center">
+        <section className="flex flex-col gap-10">
+          <h1 className="text-3xl">Adicione um produto</h1>
+          <form onSubmit={insertProduct} className="flex justify-center flex-col gap-3">
+            <label>Nome:</label>
+            <input className="border border-black border-2" type="text" ref={productNameRef} />
+            <label>Quantidade:</label>
+            <input
+              className="border border-black border-2"
+              type="number"
+              ref={productQuantityRef}
+            />
+            <button type="submit">Adicionar</button>
+          </form>
+        </section>
+      </div>
+      <div></div>
     </main>
   );
 }

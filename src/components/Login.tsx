@@ -49,20 +49,26 @@ export default function Login() {
       {user ? (
         <div>
           <section>
-            <h1 className="text-3xl">Deseja sair?</h1>
-            <button onClick={signOut}>Log Out</button>
+            <h1 className="text-3xl mt-10">Deseja sair?</h1>
+            <button className="mt-10" onClick={signOut}>
+              Log Out
+            </button>
           </section>
         </div>
       ) : (
         <div>
           <section>
-            <h1 className="text-3xl">Login</h1>
+            <h1 className="text-3xl mt-10">Login</h1>
             <div>
               <form onSubmit={signIn} className="flex flex-col gap-5">
-                <label>Email:</label>
-                <input type="text" ref={emailInputRef} />
+                <label className="mt-6">Email:</label>
+                <input className="border border-black border-2" type="text" ref={emailInputRef} />
                 <label>Senha:</label>
-                <input type="password" ref={passwordInputRef} />
+                <input
+                  className="border border-black border-2"
+                  type="password"
+                  ref={passwordInputRef}
+                />
                 <button className="bg-neutral-200 rounded-md" type="submit">
                   Log In
                 </button>
