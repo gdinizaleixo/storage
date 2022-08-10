@@ -1,19 +1,21 @@
+import Router from "next/router";
+
 export default function Header() {
+  function toApp() {
+    Router.push("/app");
+  }
   return (
-    <header>
-      <nav>
-        <a className="logo" href="#">
-          Estoque
-        </a>
-        <ul className="nav-list">
+    <header className="h-30">
+      <nav className="bg-neutral-800 h-30">
+        <ul className="flex flex-row justify-around col text-white">
           <li>
-            <a href="#">Agenda</a>
+            <a onClick={toApp}>Agenda</a>
           </li>
           <li>
-            <a href="#">Estoque</a>
+            <a href="app">Estoque</a>
           </li>
           <li>
-            <a href="#">Opções</a>
+            <a href="#">Sair</a>
           </li>
         </ul>
       </nav>

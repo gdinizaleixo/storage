@@ -1,8 +1,9 @@
 import { FormEvent, useRef } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import { useAuth } from "../hooks/useAuth";
 import { supabase } from "../utils/supabase";
 export default function Login() {
-  const { user } = useAuth()
+  const { user } = useAuth();
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
 
@@ -12,12 +13,13 @@ export default function Login() {
     const password = passwordInputRef.current?.value;
 
     if (!email) {
-      emailInputRef.current?.focus()
-      return
+      emailInputRef.current?.focus();
+      return;
     }
-
-    console.log(emailInputRef.current?.value);
-    console.log(passwordInputRef.current?.value);
+    if (!password) {
+      passwordInputRef.current?.focus();
+      return;
+    }
 
     const { session, error, user } = await supabase.auth.signIn({
       email,
@@ -26,6 +28,11 @@ export default function Login() {
     console.log(session);
     console.log(error);
     console.log(user);
+    if (error === null) {
+      console.log("Bem vindo!");
+    } else {
+      console.log("Credenciais Invalidas");
+    }
   }
   async function signOut() {
     const { error } = await supabase.auth.signOut();
@@ -38,25 +45,29 @@ export default function Login() {
   //   });
   // }
   return (
-    <main>
+    <main className="flex justify-center">
       {user ? (
-        <div className="login">
-          <section className="container">
-            <h1>Deseja sair?</h1>
+        <div>
+          <section>
+            <h1 className="text-3xl">Deseja sair?</h1>
             <button onClick={signOut}>Log Out</button>
           </section>
         </div>
       ) : (
-        <div className="login">
-          <section className="container">
-            <h1>Login</h1>
-            <form onSubmit={signIn} className="form">
-                <label htmlFor="userEmail">Email:</label>
+        <div>
+          <section>
+            <h1 className="text-3xl">Login</h1>
+            <div>
+              <form onSubmit={signIn} className="flex flex-col gap-5">
+                <label>Email:</label>
                 <input type="text" ref={emailInputRef} />
-                <label htmlFor="userPassword">Senha</label>
+                <label>Senha:</label>
                 <input type="password" ref={passwordInputRef} />
-                <button type="submit">LogIn</button>
+                <button className="bg-neutral-200 rounded-md" type="submit">
+                  Log In
+                </button>
               </form>
+            </div>
           </section>
         </div>
       )}
