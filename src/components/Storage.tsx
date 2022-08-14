@@ -3,6 +3,7 @@ import { supabase } from "../utils/supabase";
 import { useAuth } from "../hooks/useAuth";
 
 export default function Storage() {
+  selectProduct();
   const productNameRef = useRef<HTMLInputElement>(null);
   const productQuantityRef = useRef<HTMLInputElement>(null);
 
@@ -30,19 +31,24 @@ export default function Storage() {
   }
   async function selectProduct() {
     const { data, error } = await supabase.from("product").select();
+    console.log(data);
   }
 
   return (
-    <main>
-      <div className="flex justify-center">
+    <main className="">
+      <div className="flex justify-center text-white">
         <section className="flex flex-col gap-10">
           <h1 className="text-3xl">Adicione um produto</h1>
           <form onSubmit={insertProduct} className="flex justify-center flex-col gap-3">
             <label>Nome:</label>
-            <input className="border border-black border-2" type="text" ref={productNameRef} />
+            <input
+              className="border border-black border-2 text-black"
+              type="text"
+              ref={productNameRef}
+            />
             <label>Quantidade:</label>
             <input
-              className="border border-black border-2"
+              className="border border-black border-2 text-black"
               type="number"
               ref={productQuantityRef}
             />
@@ -50,7 +56,6 @@ export default function Storage() {
           </form>
         </section>
       </div>
-      <div></div>
     </main>
   );
 }

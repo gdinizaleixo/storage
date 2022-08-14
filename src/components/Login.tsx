@@ -3,6 +3,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useAuth } from "../hooks/useAuth";
 import { supabase } from "../utils/supabase";
 export default function Login() {
+  const userLog = null;
   const { user } = useAuth();
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
@@ -25,9 +26,6 @@ export default function Login() {
       email,
       password,
     });
-    console.log(session);
-    console.log(error);
-    console.log(user);
     if (error === null) {
       console.log("Bem vindo!");
     } else {
@@ -45,7 +43,7 @@ export default function Login() {
   //   });
   // }
   return (
-    <main className="flex justify-center">
+    <main className="flex justify-center text-white">
       {user ? (
         <div>
           <section>
@@ -62,14 +60,18 @@ export default function Login() {
             <div>
               <form onSubmit={signIn} className="flex flex-col gap-5">
                 <label className="mt-6">Email:</label>
-                <input className="border border-black border-2" type="text" ref={emailInputRef} />
+                <input
+                  className="border border-black border-2 text-black"
+                  type="text"
+                  ref={emailInputRef}
+                />
                 <label>Senha:</label>
                 <input
-                  className="border border-black border-2"
+                  className="border border-black border-2 text-black"
                   type="password"
                   ref={passwordInputRef}
                 />
-                <button className="bg-neutral-200 rounded-md" type="submit">
+                <button className="bg-white rounded-md text-black border-none" type="submit">
                   Log In
                 </button>
               </form>
