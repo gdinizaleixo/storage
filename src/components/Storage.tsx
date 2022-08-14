@@ -1,9 +1,8 @@
 import { FormEvent, useRef } from "react";
 import { supabase } from "../utils/supabase";
-import { useAuth } from "../hooks/useAuth";
 
 export default function Storage() {
-  selectProduct();
+  const tableData = selectProduct();
   const productNameRef = useRef<HTMLInputElement>(null);
   const productQuantityRef = useRef<HTMLInputElement>(null);
 
@@ -31,11 +30,11 @@ export default function Storage() {
   }
   async function selectProduct() {
     const { data, error } = await supabase.from("product").select();
-    console.log(data);
+    return data;
   }
-
+  console.log(tableData);
   return (
-    <main className="">
+    <main className="mt-10">
       <div className="flex justify-center text-white">
         <section className="flex flex-col gap-10">
           <h1 className="text-3xl">Adicione um produto</h1>
@@ -54,6 +53,28 @@ export default function Storage() {
             />
             <button type="submit">Adicionar</button>
           </form>
+          <table className="border-collapse border border-white ...">
+            <thead>
+              <tr>
+                <th className="border border-white">Nome</th>
+                <th className="border border-white">Quantidade</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-white">product1</td>
+                <td className="border border-white">product1_qty</td>
+              </tr>
+              <tr>
+                <td className="border border-white">product2</td>
+                <td className="border border-white">product2_qty</td>
+              </tr>
+              <tr>
+                <td className="border border-white">product3</td>
+                <td className="border border-white">product3_qty</td>
+              </tr>
+            </tbody>
+          </table>
         </section>
       </div>
     </main>

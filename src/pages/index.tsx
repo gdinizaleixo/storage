@@ -1,6 +1,5 @@
 import Header from "../components/Header";
 import Login from "../components/Login";
-import { AuthContext } from "../contexts/AuthContext";
 
 export default function Home() {
   return (

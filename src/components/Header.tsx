@@ -1,5 +1,9 @@
-import Router from "next/router";
+import { supabase } from "../utils/supabase";
 
+async function signOut() {
+  const { error } = await supabase.auth.signOut();
+  console.log(error);
+}
 export default function Header() {
   return (
     <header className="h-30">
@@ -12,7 +16,7 @@ export default function Header() {
             <a href="app">Estoque</a>
           </li>
           <li>
-            <a href="/">Sair</a>
+            <a onClick={signOut}>Sair</a>
           </li>
         </ul>
       </nav>
