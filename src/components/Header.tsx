@@ -10,7 +10,7 @@ export default function Header() {
       <nav className="bg-neutral-800 h-30">
         <ul className="flex flex-row justify-around col text-white">
           <li>
-            <a>Agenda</a>
+            <a href="agenda">Agenda</a>
           </li>
           <li>
             <a href="app">Estoque</a>

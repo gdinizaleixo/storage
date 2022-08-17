@@ -1,10 +1,12 @@
-import { FormEvent, useRef } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import { Product } from "../types/Product";
 import { supabase } from "../utils/supabase";
 
 export default function Storage() {
-  const tableData = selectProduct();
+  // const tableData = selectProduct();
   const productNameRef = useRef<HTMLInputElement>(null);
   const productQuantityRef = useRef<HTMLInputElement>(null);
+  const [tableData, setTableData] = useState<Product[] | null>(null);
 
   async function insertProduct(e: FormEvent) {
     e.preventDefault();
@@ -29,10 +31,13 @@ export default function Storage() {
     console.log(error);
   }
   async function selectProduct() {
-    const { data, error } = await supabase.from("product").select();
-    return data;
+    const { data } = await supabase.from<Product>("product").select().throwOnError()
+    return data
   }
-  console.log(tableData);
+  useEffect(() => {
+    selectProduct().then((data) => setTableData(data)).catch((err) => console.error(err)
+    )
+  }, [])
   return (
     <main className="mt-10">
       <div className="flex justify-center text-white">
