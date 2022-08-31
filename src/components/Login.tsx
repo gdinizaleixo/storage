@@ -8,7 +8,7 @@ export default function Login() {
   const { user } = useAuth();
   useEffect(() => {
     if (user) {
-      Router.push("/app");
+      Router.push("/agenda");
     }
   }, [user]);
 

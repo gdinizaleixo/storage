@@ -16,7 +16,7 @@ export default function Header() {
             <a href="app">Estoque</a>
           </li>
           <li>
-            <a onClick={signOut}>Sair</a>
+            <a className="cursor-pointer" onClick={signOut}>Sair</a>
           </li>
         </ul>
       </nav>

@@ -5,29 +5,31 @@ import { supabase } from "../utils/supabase";
 export default function Storage() {
   // const tableData = selectProduct();
   const productNameRef = useRef<HTMLInputElement>(null);
+  const productPriceRef = useRef<HTMLInputElement>(null);
   const productQuantityRef = useRef<HTMLInputElement>(null);
   const [tableData, setTableData] = useState<Product[] | null>(null);
 
   async function insertProduct(e: FormEvent) {
     e.preventDefault();
     const productName = productNameRef.current?.value;
+    const productPrice = productPriceRef.current?.value;
     const productQuantity = productQuantityRef.current?.value;
 
     if (!productName) {
       productNameRef.current?.focus();
       return;
     }
+    if (productPrice) {
+      productPriceRef.current?.focus();
+    }
     if (!productQuantity) {
       productQuantityRef.current?.focus();
       return;
     }
 
-    console.log(productNameRef.current?.value);
-    console.log(productQuantityRef.current?.value);
-
     const { data, error } = await supabase
       .from("product")
-      .insert([{ product_name: productName, product_quantity: productQuantity }]);
+      .insert([{ product_name: productName, product_quantity: productQuantity, product_price: productPrice }]);
     console.log(error);
   }
   async function selectProduct() {
@@ -49,6 +51,12 @@ export default function Storage() {
               className="border border-black border-2 text-black"
               type="text"
               ref={productNameRef}
+            />
+            <label>Preço:</label>
+            <input
+              className="border border-black border-2 text-black"
+              type="number"
+              ref={productPriceRef}
             />
             <label>Quantidade:</label>
             <input
