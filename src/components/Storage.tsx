@@ -80,7 +80,7 @@ export default function Storage() {
                 </tr>
               </thead>
               {tableData?.map((tableData) => (
-                <tbody>
+                <tbody key={tableData.product_id}>
                   <tr>
                     <td className="border border-white text-center">{tableData.product_name}</td>
                     <td className="border border-white text-center">{tableData.product_price}</td>
