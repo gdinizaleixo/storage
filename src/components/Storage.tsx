@@ -27,19 +27,24 @@ export default function Storage() {
       return;
     }
 
-    const { data, error } = await supabase
-      .from("product")
-      .insert([{ product_name: productName, product_quantity: productQuantity, product_price: productPrice }]);
+    const { data, error } = await supabase.from("product").insert([
+      {
+        product_name: productName,
+        product_quantity: productQuantity,
+        product_price: productPrice,
+      },
+    ]);
     console.log(error);
   }
   async function selectProduct() {
-    const { data } = await supabase.from<Product>("product").select().throwOnError()
-    return data
+    const { data } = await supabase.from<Product>("product").select().throwOnError();
+    return data;
   }
   useEffect(() => {
-    selectProduct().then((data) => setTableData(data)).catch((err) => console.error(err)
-    )
-  }, [])
+    selectProduct()
+      .then((data) => setTableData(data))
+      .catch((err) => console.error(err));
+  }, []);
   return (
     <main className="mt-10">
       <div className="flex justify-center text-white">
@@ -65,29 +70,28 @@ export default function Storage() {
               ref={productQuantityRef}
             />
             <button type="submit">Adicionar</button>
+
+            <table className="border-collapse border border-white mt-10">
+              <thead>
+                <tr>
+                  <th className="border border-white text-center">Nome</th>
+                  <th className="border border-white text-center">Preço</th>
+                  <th className="border border-white text-center">Quantidade</th>
+                </tr>
+              </thead>
+              {tableData?.map((tableData) => (
+                <tbody>
+                  <tr>
+                    <td className="border border-white text-center">{tableData.product_name}</td>
+                    <td className="border border-white text-center">{tableData.product_price}</td>
+                    <td className="border border-white text-center">
+                      {tableData.product_quantity}
+                    </td>
+                  </tr>
+                </tbody>
+              ))}
+            </table>
           </form>
-          <table className="border-collapse border border-white ...">
-            <thead>
-              <tr>
-                <th className="border border-white">Nome</th>
-                <th className="border border-white">Quantidade</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border border-white">product1</td>
-                <td className="border border-white">product1_qty</td>
-              </tr>
-              <tr>
-                <td className="border border-white">product2</td>
-                <td className="border border-white">product2_qty</td>
-              </tr>
-              <tr>
-                <td className="border border-white">product3</td>
-                <td className="border border-white">product3_qty</td>
-              </tr>
-            </tbody>
-          </table>
         </section>
       </div>
     </main>
