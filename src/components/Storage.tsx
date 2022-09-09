@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { Product } from "../types/Product";
 import { supabase } from "../utils/supabase";
+import * as Accordion from '@radix-ui/react-accordion';
 
 export default function Storage() {
   // const tableData = selectProduct();
@@ -40,6 +41,12 @@ export default function Storage() {
     const { data } = await supabase.from<Product>("product").select().throwOnError();
     return data;
   }
+  async function deleteProduct(product_id: number) {
+    const { data, error } = await supabase
+  .from('product')
+  .delete()
+  .match({ product_id })
+  }
   useEffect(() => {
     selectProduct()
       .then((data) => setTableData(data))
@@ -70,6 +77,7 @@ export default function Storage() {
               ref={productQuantityRef}
             />
             <button type="submit">Adicionar</button>
+            </form>
 
             <table className="border-collapse border border-white mt-10">
               <thead>
@@ -87,13 +95,16 @@ export default function Storage() {
                     <td className="border border-white text-center">
                       {tableData.product_quantity}
                     </td>
+                    <td className="border border-white text-center" ><button onClick={() => deleteProduct(tableData.product_id)}>Updata</button></td>
+                    <td className="border border-white text-center" ><button onClick={() => deleteProduct(tableData.product_id)}>Delete</button></td>
                   </tr>
                 </tbody>
               ))}
             </table>
-          </form>
+          
         </section>
       </div>
+      
     </main>
   );
 }
