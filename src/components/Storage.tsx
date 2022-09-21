@@ -18,22 +18,31 @@ export default function Storage() {
       productNameRef.current?.focus();
       return;
     }
-    if (productPrice) {
+    if (!productPrice) {
       productPriceRef.current?.focus();
+      return
     }
     if (!productQuantity) {
       productQuantityRef.current?.focus();
       return;
     }
 
+    const newProduct = {
+      product_name: productName,
+      product_quantity: Number(productQuantity),
+      product_price: Number(productPrice),
+    }
+
     const { data, error } = await supabase.from("product").insert([
-      {
-        product_name: productName,
-        product_quantity: productQuantity,
-        product_price: productPrice,
-      },
+      newProduct,
     ]);
-    console.log(error);
+    if (!error) {
+      const currentTableData = tableData ?? []
+      setTableData([...currentTableData, { product_id: currentTableData[currentTableData.length - 1].product_id + 1, ...newProduct}])
+    }
+    productNameRef.current.value="";
+    productPriceRef.current.value="";
+    productQuantityRef.current.value="";
   }
   async function selectProduct() {
     const { data } = await supabase.from<Product>("product").select().throwOnError();
