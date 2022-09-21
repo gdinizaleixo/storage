@@ -14,7 +14,7 @@ export default function App() {
   return (
     <>
       <div className="bg-[url('../imgs/background-home.jpg')] bg-no-repeat bg-cover min-h-screen min-w-screen">
-          <Header />
+        <Header />
       </div>
     </>
   );
