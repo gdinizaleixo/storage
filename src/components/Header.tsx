@@ -6,9 +6,9 @@ async function signOut() {
 }
 export default function Header() {
   return (
-    <header className="h-30">
+    <header className="min-h-200">
       <nav className="bg-neutral-800 h-30">
-        <ul className="flex flex-row justify-around col text-white">
+        <ul className="flex flex-row justify-around col text-white text-lg p-2">
           <li>
             <a href="agenda">Agenda</a>
           </li>

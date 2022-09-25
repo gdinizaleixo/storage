@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { Product } from "../types/Product";
 import { supabase } from "../utils/supabase";
+import { Disclosure } from "@headlessui/react";
 
 export default function Storage() {
   const productNameRef = useRef<HTMLInputElement>(null);
@@ -20,7 +21,7 @@ export default function Storage() {
     }
     if (!productPrice) {
       productPriceRef.current?.focus();
-      return
+      return;
     }
     if (!productQuantity) {
       productQuantityRef.current?.focus();
@@ -31,18 +32,19 @@ export default function Storage() {
       product_name: productName,
       product_quantity: Number(productQuantity),
       product_price: Number(productPrice),
-    }
+    };
 
-    const { data, error } = await supabase.from("product").insert([
-      newProduct,
-    ]);
+    const { data, error } = await supabase.from("product").insert([newProduct]);
     if (!error) {
-      const currentTableData = tableData ?? []
-      setTableData([...currentTableData, { product_id: currentTableData[currentTableData.length - 1].product_id + 1, ...newProduct}])
+      const currentTableData = tableData ?? [];
+      setTableData([
+        ...currentTableData,
+        { product_id: currentTableData[currentTableData.length - 1].product_id + 1, ...newProduct },
+      ]);
     }
-    productNameRef.current.value="";
-    productPriceRef.current.value="";
-    productQuantityRef.current.value="";
+    productNameRef.current.value = "";
+    productPriceRef.current.value = "";
+    productQuantityRef.current.value = "";
   }
   async function selectProduct() {
     const { data } = await supabase.from<Product>("product").select().throwOnError();
@@ -86,31 +88,35 @@ export default function Storage() {
               </tbody>
             ))}
           </table>
-          <button>Adicionar um Produto</button>
-          <form onSubmit={insertProduct} className="flex justify-center flex-col gap-3">
-            <label>Nome:</label>
-            <input
-              className="border border-black border-2 text-black"
-              type="text"
-              ref={productNameRef}
-            />
-            <label>Preço:</label>
-            <input
-              className="border border-black border-2 text-black"
-              type="number"
-              min="0"
-              step="0.1"
-              ref={productPriceRef}
-            />
-            <label>Quantidade:</label>
-            <input
-              className="border border-black border-2 text-black"
-              type="number"
-              min="1"
-              ref={productQuantityRef}
-            />
-            <button type="submit">Adicionar</button>
-          </form>
+          <Disclosure>
+            <Disclosure.Button className="py-2">Adicionar um Produto</Disclosure.Button>
+            <Disclosure.Panel className="text-gray-100">
+              <form onSubmit={insertProduct} className="flex justify-center flex-col gap-3">
+                <label>Nome:</label>
+                <input
+                  className="border border-black border-2 text-black"
+                  type="text"
+                  ref={productNameRef}
+                />
+                <label>Preço:</label>
+                <input
+                  className="border border-black border-2 text-black"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  ref={productPriceRef}
+                />
+                <label>Quantidade:</label>
+                <input
+                  className="border border-black border-2 text-black"
+                  type="number"
+                  min="1"
+                  ref={productQuantityRef}
+                />
+                <button type="submit">Adicionar</button>
+              </form>
+            </Disclosure.Panel>
+          </Disclosure>
         </section>
       </div>
     </main>
