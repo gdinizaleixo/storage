@@ -43,10 +43,10 @@ export default function Login() {
     <main className="flex justify-center text-white">
       <div>
         <section>
-          <h1 className="text-3xl mt-10">Login</h1>
+          <h1 className="text-4xl mt-20 decoration-double font-medium">Acessar sua Conta</h1>
           <div>
-            <form onSubmit={signIn} className="flex flex-col gap-5">
-              <label className="mt-6">Email:</label>
+            <form onSubmit={signIn} className="flex flex-col gap-5 text-xl">
+              <label className="mt-20">Email:</label>
               <input
                 className="border border-black border-2 text-black"
                 type="text"
@@ -58,7 +58,10 @@ export default function Login() {
                 type="password"
                 ref={passwordInputRef}
               />
-              <button className="bg-white rounded-md text-black border-none" type="submit">
+              <button
+                className="bg-white rounded-md text-black border-none mt-5 hover:bg-neutral-100"
+                type="submit"
+              >
                 Log In
               </button>
             </form>

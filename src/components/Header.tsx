@@ -8,7 +8,7 @@ export default function Header() {
   return (
     <header className="min-h-200">
       <nav className="bg-neutral-800 h-30">
-        <ul className="flex flex-row justify-around col text-white text-lg p-2">
+        <ul className="flex flex-row justify-around col text-white text-lg p-2 decoration-double font-medium">
           <li>
             <a href="agenda">Agenda</a>
           </li>

@@ -2,6 +2,8 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import { Product } from "../types/Product";
 import { supabase } from "../utils/supabase";
 import { Disclosure } from "@headlessui/react";
+import { FaTrashAlt } from "react-icons/fa";
+import { AiFillEdit } from "react-icons/ai";
 
 export default function Storage() {
   const productNameRef = useRef<HTMLInputElement>(null);
@@ -63,44 +65,52 @@ export default function Storage() {
     <main className="mt-10">
       <div className="flex justify-center text-white">
         <section className="flex flex-col gap-10">
-          <h1 className="text-3xl text-center">Estoque</h1>
-          <table className="border-collapse border border-white">
+          <h1 className="text-5xl mt-20 decoration-double font-medium text-center ">Estoque</h1>
+          <table className="border-collapse border border-white mt-10 text-xl">
             <thead>
-              <tr>
-                <th className="border border-white text-center">Nome do produto</th>
-                <th className="border border-white text-center">Preço</th>
-                <th className="border border-white text-center">Quantidade</th>
+              <tr className="border border-white text-center">
+                <th className="border border-white text-center p-2">Nome do produto</th>
+                <th className="border border-white text-center p-2">Preço</th>
+                <th className="border border-white text-center p-2">Quantidade</th>
               </tr>
             </thead>
             {tableData?.map((tableData) => (
               <tbody key={tableData.product_id}>
                 <tr>
-                  <td className="border border-white text-center">{tableData.product_name}</td>
-                  <td className="border border-white text-center">{tableData.product_price}</td>
-                  <td className="border border-white text-center">{tableData.product_quantity}</td>
-                  <td className="border border-white text-center">
-                    <button>Update</button>
+                  <td className="border border-white text-center text-lg p-2">
+                    {tableData.product_name}
                   </td>
-                  <td className="border border-white text-center">
-                    <button onClick={() => deleteProduct(tableData.product_id)}>Delete</button>
+                  <td className="border border-white text-center text-lg p-2">
+                    {tableData.product_price}
+                  </td>
+                  <td className="border border-white text-center text-lg p-2">
+                    {tableData.product_quantity}
+                  </td>
+                  <td className="border text-center p-2">
+                    <button className="px-2">
+                      <AiFillEdit />
+                    </button>{" "}
+                    <button className="px-2" onClick={() => deleteProduct(tableData.product_id)}>
+                      <FaTrashAlt />
+                    </button>
                   </td>
                 </tr>
               </tbody>
             ))}
           </table>
           <Disclosure>
-            <Disclosure.Button className="py-2">Adicionar um Produto</Disclosure.Button>
+            <Disclosure.Button className="py-2 text-lg">Adicionar um Produto</Disclosure.Button>
             <Disclosure.Panel className="text-gray-100">
               <form onSubmit={insertProduct} className="flex justify-center flex-col gap-3">
                 <label>Nome:</label>
                 <input
-                  className="border border-black border-2 text-black"
+                  className="border border-black border-2 text-black bg-[#e7e7e7]"
                   type="text"
                   ref={productNameRef}
                 />
                 <label>Preço:</label>
                 <input
-                  className="border border-black border-2 text-black"
+                  className="border border-black border-2 text-black bg-[#e7e7e7]"
                   type="number"
                   min="0"
                   step="0.01"
@@ -108,7 +118,7 @@ export default function Storage() {
                 />
                 <label>Quantidade:</label>
                 <input
-                  className="border border-black border-2 text-black"
+                  className="border border-black border-2 text-black bg-[#e7e7e7]"
                   type="number"
                   min="1"
                   ref={productQuantityRef}
