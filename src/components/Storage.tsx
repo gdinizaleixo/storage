@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { Product } from "../types/Product";
 import { supabase } from "../utils/supabase";
-import { Disclosure } from "@headlessui/react";
+import { Disclosure, Menu } from "@headlessui/react";
 import { FaTrashAlt } from "react-icons/fa";
 import { AiFillEdit } from "react-icons/ai";
 
