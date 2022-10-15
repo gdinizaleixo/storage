@@ -11,6 +11,13 @@ export default function Storage() {
   const productQuantityRef = useRef<HTMLInputElement>(null);
   const [tableData, setTableData] = useState<Product[] | null>(null);
 
+  const StorageDataChange = supabase;
+
+  var formatter = new Intl.NumberFormat("pt-br", {
+    style: "currency",
+    currency: "BRL",
+  });
+
   async function insertProduct(e: FormEvent) {
     e.preventDefault();
     const productName = productNameRef.current?.value;
@@ -81,7 +88,7 @@ export default function Storage() {
                     {tableData.product_name}
                   </td>
                   <td className="border border-white text-center text-lg p-2">
-                    {tableData.product_price}
+                    {formatter.format(tableData.product_price)}
                   </td>
                   <td className="border border-white text-center text-lg p-2">
                     {tableData.product_quantity}

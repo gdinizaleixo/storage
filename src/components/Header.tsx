@@ -1,5 +1,5 @@
 import { supabase } from "../utils/supabase";
-import { Menu } from "@headlessui/react"
+import { Menu } from "@headlessui/react";
 
 async function signOut() {
   const { error } = await supabase.auth.signOut();
@@ -17,42 +17,32 @@ export default function Header() {
             <a href="app">Estoque</a>
           </li>
           <li>
-          <Menu>
-            <Menu.Button>Configurações</Menu.Button>
-            <Menu.Items className="display flex flex-col gap-1 text-sm">
-              <Menu.Item>
-                {({ active }) => (
-                  <a
-                    className={`${active && 'bg-basic'}`}
-                    href="#"
-                  >
-                    Sua Conta
-                  </a>
-                )}
-              </Menu.Item>
-              <Menu.Item>
-                {({ active }) => (
-                  <a
-                    className={`${active && 'bg-basic'}`}
-                    href="#"
-                  >
-                    Criar uma Conta
-                  </a>
-                )}
-              </Menu.Item>
-              <Menu.Item>
-                {({ active }) => (
-                  <a
-                    className={`${active && 'bg-basic'}`}
-                    onClick={signOut}
-                    
-                  >
-                    Sair
-                  </a>
-                )}
-              </Menu.Item>
-            </Menu.Items>
-          </Menu>
+            <Menu>
+              <Menu.Button>Configurações</Menu.Button>
+              <Menu.Items className="display flex flex-col gap-1 text-sm">
+                <Menu.Item>
+                  {({ active }) => (
+                    <a className={`${active && "bg-basic"}`} href="#">
+                      Sua Conta
+                    </a>
+                  )}
+                </Menu.Item>
+                <Menu.Item>
+                  {({ active }) => (
+                    <a className={`${active && "bg-basic"}`} href="#">
+                      Criar uma Conta
+                    </a>
+                  )}
+                </Menu.Item>
+                <Menu.Item>
+                  {({ active }) => (
+                    <a className={`${active && "bg-basic cursor-pointer"}`} onClick={signOut}>
+                      Sair
+                    </a>
+                  )}
+                </Menu.Item>
+              </Menu.Items>
+            </Menu>
           </li>
         </ul>
       </nav>
