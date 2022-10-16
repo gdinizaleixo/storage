@@ -11,8 +11,6 @@ export default function Storage() {
   const productQuantityRef = useRef<HTMLInputElement>(null);
   const [tableData, setTableData] = useState<Product[] | null>(null);
 
-  const StorageDataChange = supabase;
-
   var formatter = new Intl.NumberFormat("pt-br", {
     style: "currency",
     currency: "BRL",
@@ -55,13 +53,16 @@ export default function Storage() {
     productPriceRef.current.value = "";
     productQuantityRef.current.value = "";
   }
+
   async function selectProduct() {
     const { data } = await supabase.from<Product>("product").select().throwOnError();
     return data;
   }
+
   async function deleteProduct(product_id: number) {
     const { data, error } = await supabase.from("product").delete().match({ product_id });
   }
+
   useEffect(() => {
     selectProduct()
       .then((data) => setTableData(data))

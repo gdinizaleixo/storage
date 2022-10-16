@@ -1,11 +1,11 @@
 import { supabase } from "../utils/supabase";
 import { Menu } from "@headlessui/react";
 
-async function signOut() {
-  const { error } = await supabase.auth.signOut();
-  console.log(error);
-}
 export default function Header() {
+  async function signOut() {
+    const { error } = await supabase.auth.signOut();
+    console.log(error);
+  }
   return (
     <header className="min-h-200">
       <nav className="bg-neutral-800 h-30">
@@ -22,14 +22,14 @@ export default function Header() {
               <Menu.Items className="display flex flex-col gap-1 text-sm">
                 <Menu.Item>
                   {({ active }) => (
-                    <a className={`${active && "bg-basic"}`} href="#">
+                    <a className={`${active && "bg-basic"}`} href="user">
                       Sua Conta
                     </a>
                   )}
                 </Menu.Item>
                 <Menu.Item>
                   {({ active }) => (
-                    <a className={`${active && "bg-basic"}`} href="#">
+                    <a className={`${active && "bg-basic"}`} href="signUp">
                       Criar uma Conta
                     </a>
                   )}
