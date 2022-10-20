@@ -1,3 +1,3 @@
-export type UserData = {
+export type User = {
   user_email: string;
 };

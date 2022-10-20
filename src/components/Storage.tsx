@@ -16,6 +16,24 @@ export default function Storage() {
     currency: "BRL",
   });
 
+  useEffect(() => {
+    const mySubscription = supabase
+      .from("product")
+      .on("*", (payload) => {
+        console.log("CHANGE received!", payload);
+      })
+      .on("INSERT", (payload) => {
+        console.log("INSERT received!", payload);
+      })
+      .on("DELETE", (payload) => {
+        console.log("DELETE received!", payload);
+      })
+      .on("UPDATE", (payload) => {
+        console.log("UPDATE received!", payload);
+      })
+      .subscribe();
+  }, []);
+
   async function insertProduct(e: FormEvent) {
     e.preventDefault();
     const productName = productNameRef.current?.value;
@@ -118,7 +136,7 @@ export default function Storage() {
                 />
                 <label>Preço:</label>
                 <input
-                  className="border border-black border-2 text-black bg-[#e7e7e7]"
+                  className="border-black border-2 text-black bg-[#e7e7e7]"
                   type="number"
                   min="0"
                   step="0.01"

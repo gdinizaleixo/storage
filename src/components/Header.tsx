@@ -14,7 +14,7 @@ export default function Header() {
             <a href="agenda">Agenda</a>
           </li>
           <li>
-            <a href="app">Estoque</a>
+            <a href="storage">Estoque</a>
           </li>
           <li>
             <Menu>

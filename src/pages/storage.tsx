@@ -10,6 +10,9 @@ export default function App() {
     if (!user) {
       Router.push("/");
     }
+    if (!user?.user_metadata.adm) {
+      Router.push("/");
+    }
   }, [user]);
 
   return (

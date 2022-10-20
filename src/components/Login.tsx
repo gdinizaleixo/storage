@@ -7,13 +7,20 @@ import { useEffect } from "react";
 export default function Login() {
   const { user } = useAuth();
   useEffect(() => {
-    if (user) {
+    if (user?.user_metadata.adm) {
       Router.push("/agenda");
+    } else {
+      signOut;
+      console.log("Sucumba daqui");
     }
   }, [user]);
 
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
+  async function signOut() {
+    const { error } = await supabase.auth.signOut();
+    console.log(error);
+  }
 
   async function signIn(evt: FormEvent) {
     evt.preventDefault();
@@ -29,15 +36,10 @@ export default function Login() {
       return;
     }
 
-    const { session, error, user } = await supabase.auth.signIn({
+    const { error } = await supabase.auth.signIn({
       email,
       password,
     });
-    if (error === null) {
-      console.log("Bem vindo!");
-    } else {
-      console.log("Credenciais Invalidas");
-    }
   }
   return (
     <main className="flex justify-center text-white">
