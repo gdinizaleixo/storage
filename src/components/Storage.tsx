@@ -17,21 +17,15 @@ export default function Storage() {
   });
 
   useEffect(() => {
-    const mySubscription = supabase
+    const subscription = supabase
       .from("product")
-      .on("*", (payload) => {
-        console.log("CHANGE received!", payload);
-      })
-      .on("INSERT", (payload) => {
-        console.log("INSERT received!", payload);
-      })
-      .on("DELETE", (payload) => {
-        console.log("DELETE received!", payload);
-      })
-      .on("UPDATE", (payload) => {
-        console.log("UPDATE received!", payload);
-      })
+      .on("INSERT", console.log)
+      .on("UPDATE", console.log)
+      .on("DELETE", console.log)
       .subscribe();
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   async function insertProduct(e: FormEvent) {

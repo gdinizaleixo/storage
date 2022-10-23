@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Router from "next/router";
+import Link from "next/link";
 
 export default function BasicMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -46,14 +47,12 @@ export default function BasicMenu() {
         }}
       >
         <MenuItem onClick={handleClose}>
-          <a onClick={() => goUser("user")}>Minha Conta</a>
+          <Link href="/user">Minha Conta</Link>
         </MenuItem>
         <MenuItem onClick={handleClose}>
-          <a onClick={() => goUser("signUp")}>Criar uma Conta</a>
+          <Link href="/signUp">Criar uma Conta</Link>
         </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <a onClick={signOut}>Sair</a>
-        </MenuItem>
+        <MenuItem onClick={signOut}>Sair</MenuItem>
       </Menu>
     </div>
   );

@@ -39,6 +39,8 @@ export default function Login() {
       email,
       password,
     });
+    emailInputRef.current.value = "";
+    passwordInputRef.current.value = "";
   }
   return (
     <div className="flex md:flex-row flex-col font-bold md:justify-around w-full items-center gap-5 md:gap-0">
