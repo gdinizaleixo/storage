@@ -17,7 +17,7 @@ export default function App() {
 
   return (
     <>
-      <div className="bg-gradient-to-tr from-basicLight via-basic to-basicDark bg-no-repeat bg-cover min-h-screen min-w-screen">
+      <div className="bg-gradient-to-tr from-basicLight via-basic to-basicDark bg-no-repeat bg-cover ">
         <Header />
         <SignAdm />
       </div>

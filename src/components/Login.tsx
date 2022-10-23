@@ -1,8 +1,7 @@
-import { FormEvent, useRef } from "react";
+import { FormEvent, useRef, useEffect } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { supabase } from "../utils/supabase";
 import Router from "next/router";
-import { useEffect } from "react";
 
 export default function Login() {
   const { user } = useAuth();
@@ -42,34 +41,27 @@ export default function Login() {
     });
   }
   return (
-    <main className="flex justify-center text-white">
-      <div>
-        <section>
-          <h1 className="text-4xl mt-20 decoration-double font-medium">Acessar sua Conta</h1>
-          <div>
-            <form onSubmit={signIn} className="flex flex-col gap-5 text-xl">
-              <label className="mt-20">Email:</label>
-              <input
-                className="border border-black border-2 text-black"
-                type="text"
-                ref={emailInputRef}
-              />
-              <label>Senha:</label>
-              <input
-                className="border border-black border-2 text-black"
-                type="password"
-                ref={passwordInputRef}
-              />
-              <button
-                className="bg-white rounded-md text-black border-none mt-5 hover:bg-neutral-100"
-                type="submit"
-              >
-                Log In
-              </button>
-            </form>
-          </div>
-        </section>
+    <div className="flex md:flex-row flex-col font-bold md:justify-around w-full items-center gap-5 md:gap-0">
+      <div className="flex justify-center items-center">
+        <img className="w-[326px] md:w-[556px]" src="/Logo_inicial.svg" />
       </div>
-    </main>
+
+      <form
+        onSubmit={signIn}
+        className="flex flex-col gap-4 text-xl bg-white md:h-[400px] md:w-[500px] border rounded-[20px] p-4 w-[300px] h-[350px]"
+      >
+        <h1 className="md:text-4xl text-[30px] decoration-double font-medium text-center mt-[10px]">
+          Acessar sua Conta
+        </h1>
+        <label>Email:</label>
+        <input className="  btn_class" type="text" ref={emailInputRef} />
+        <label>Senha:</label>
+        <input className="btn_class" type="password" ref={passwordInputRef} />
+
+        <button className="btn" type="submit">
+          Log In
+        </button>
+      </form>
+    </div>
   );
 }

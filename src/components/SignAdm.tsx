@@ -51,45 +51,32 @@ export default function SignAdm() {
     );
   }
   return (
-    <main className="flex justify-center text-white">
-      <div>
-        <section>
-          <h1 className="text-4xl mt-20 decoration-double font-medium">Criar outra Conta</h1>
-          <div>
-            <form onSubmit={signIn} className="flex flex-col gap-5 text-xl">
-              <label className="mt-20">Nome:</label>
-              <input className=" border-black border-2 text-black" type="text" ref={nameInputRef} />
-              <label>Telefone:</label>
-              <input
-                className="border-black border-2 text-black"
-                type="number"
-                ref={phoneInputRef}
-              />
-              <label>Cpf:</label>
-              <input className="border-black border-2 text-black" type="number" ref={cpfInputRef} />
-              <label>Email:</label>
-              <input
-                className=" border-black border-2 text-black"
-                type="text"
-                ref={emailInputRef}
-              />
-              <label>Senha:</label>
-              <input
-                className=" border-black border-2 text-black"
-                type="password"
-                ref={passwordInputRef}
-              />
-              <button
-                className="bg-white rounded-md text-black border-none mt-5 hover:bg-neutral-200"
-                type="submit"
-                onClick={signIn}
-              >
-                Log In
-              </button>
-            </form>
-          </div>
-        </section>
+    <div className="flex md:flex-row  md:justify-around items-center flex-col text-black font-bold ">
+      <div className="flex justify-center items-center px-2 py-6 md:px-0 md:py-0 ">
+        <img src="/Logo_inicial.svg" />
       </div>
-    </main>
+
+      <form
+        onSubmit={signIn}
+        className="flex flex-col gap-3 text-xl bg-white  border rounded-[20px] p-[20px] w-[300px] h-[600px] mt-[50px] mb-[50px] md:h-[650px] md:w-[500px]"
+      >
+        <h1 className="md:text-4xl text-3xl text-center md:text-left decoration-double font-medium">
+          Criar outra Conta
+        </h1>
+        <label className="">Nome:</label>
+        <input className="btn_class" type="text" ref={nameInputRef} />
+        <label>Telefone:</label>
+        <input className="btn_class" type="number" ref={phoneInputRef} />
+        <label>Cpf:</label>
+        <input className="btn_class" type="number" ref={cpfInputRef} />
+        <label>Email:</label>
+        <input className=" btn_class" type="text" ref={emailInputRef} />
+        <label>Senha:</label>
+        <input className=" btn_class" type="password" ref={passwordInputRef} />
+        <button className="btn" type="submit" onClick={signIn}>
+          Log In
+        </button>
+      </form>
+    </div>
   );
 }

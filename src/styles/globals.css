@@ -2,8 +2,24 @@
 @tailwind utilities;
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
--webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 @tailwind components;
+
+.btn_class {
+  @apply border-[3px] border-black rounded-[20px] w-full h-[45px] placeholder:text-black px-3 font-light;
+}
+
+.btn {
+  @apply w-full rounded-[30px] border-[1px] h-[45px] px-3 py-1 bg-black text-white font-bold;
+}
+
+.card_dados {
+  @apply border-black border-[4px] rounded-[20px] bg-basicLight p-2 shadow-lg shadow-zinc-600 text-white;
+}
+
+.btn_options {
+  @apply border-[4px] rounded-[30px] text-center w-[150px] h-[50px] border-black font-bold;
+}
