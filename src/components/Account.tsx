@@ -15,14 +15,9 @@ export default function BasicMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   async function signOut() {
     const { error } = await supabase.auth.signOut();
     console.log(error);
-  }
-
-  function goUser(location: string) {
-    Router.push(location);
   }
 
   return (

@@ -31,8 +31,8 @@ export default function Storage() {
   async function insertProduct(e: FormEvent) {
     e.preventDefault();
     const productName = productNameRef.current?.value;
-    const productPrice = productPriceRef.current?.value;
-    const productQuantity = productQuantityRef.current?.value;
+    const productPrice = productPriceRef.current?.valueAsNumber;
+    const productQuantity = productQuantityRef.current?.valueAsNumber;
 
     if (!productName) {
       productNameRef.current?.focus();
@@ -49,21 +49,21 @@ export default function Storage() {
 
     const newProduct = {
       product_name: productName,
-      product_quantity: Number(productQuantity),
-      product_price: Number(productPrice),
+      product_quantity: productQuantity,
+      product_price: productPrice,
     };
 
     const { data, error } = await supabase.from("product").insert([newProduct]);
-    if (!error) {
+    productNameRef.current.value = "";
+    productPriceRef.current.value = "";
+    productQuantityRef.current.value = "";
+    function handleInsert() {
       const currentTableData = tableData ?? [];
       setTableData([
         ...currentTableData,
         { product_id: currentTableData[currentTableData.length - 1].product_id + 1, ...newProduct },
       ]);
     }
-    productNameRef.current.value = "";
-    productPriceRef.current.value = "";
-    productQuantityRef.current.value = "";
   }
 
   async function selectProduct() {

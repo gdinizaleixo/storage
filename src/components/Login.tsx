@@ -39,6 +39,7 @@ export default function Login() {
       email,
       password,
     });
+    console.log(error);
     emailInputRef.current.value = "";
     passwordInputRef.current.value = "";
   }
