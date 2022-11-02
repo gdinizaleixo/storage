@@ -1,15 +1,29 @@
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, Fragment, useEffect, useRef, useState } from "react";
 import { Product } from "../types/Product";
 import { supabase } from "../utils/supabase";
 import { Disclosure, Menu } from "@headlessui/react";
 import { FaTrashAlt } from "react-icons/fa";
 import { AiFillEdit } from "react-icons/ai";
+import { Dialog, Transition } from "@headlessui/react";
+import Image from "next/image";
 
 export default function Storage() {
   const productNameRef = useRef<HTMLInputElement>(null);
   const productPriceRef = useRef<HTMLInputElement>(null);
   const productQuantityRef = useRef<HTMLInputElement>(null);
   const [tableData, setTableData] = useState<Product[] | null>(null);
+
+  const [value, onChange] = useState(new Date());
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  function openModal() {
+    setIsOpen(true);
+  }
 
   var formatter = new Intl.NumberFormat("pt-br", {
     style: "currency",
@@ -86,27 +100,22 @@ export default function Storage() {
       <div className="flex justify-center text-white">
         <section className="flex flex-col gap-10">
           <h1 className="text-5xl mt-20 decoration-double font-medium text-center ">Estoque</h1>
-          <table className="border-collapse border border-white mt-10 text-xl">
+          <table className="tb_estoque">
             <thead>
-              <tr className="border border-white text-center">
-                <th className="border border-white text-center p-2">Nome do produto</th>
-                <th className="border border-white text-center p-2">Preço</th>
-                <th className="border border-white text-center p-2">Quantidade</th>
+              <tr>
+                <th className="tb_estoque">Nome do produto</th>
+                <th className="tb_estoque">Preço</th>
+                <th className="tb_estoque">Quantidade</th>
               </tr>
             </thead>
+
             {tableData?.map((tableData) => (
               <tbody key={tableData.product_id}>
                 <tr>
-                  <td className="border border-white text-center text-lg p-2">
-                    {tableData.product_name}
-                  </td>
-                  <td className="border border-white text-center text-lg p-2">
-                    {formatter.format(tableData.product_price)}
-                  </td>
-                  <td className="border border-white text-center text-lg p-2">
-                    {tableData.product_quantity}
-                  </td>
-                  <td className="border text-center p-2">
+                  <td className="tb_estoque">{tableData.product_name}</td>
+                  <td className="tb_estoque">{formatter.format(tableData.product_price)}</td>
+                  <td className="tb_estoque">{tableData.product_quantity}</td>
+                  <td className="tb_estoque">
                     <button className="px-2">
                       <AiFillEdit />
                     </button>{" "}
@@ -118,35 +127,89 @@ export default function Storage() {
               </tbody>
             ))}
           </table>
-          <Disclosure>
-            <Disclosure.Button className="py-2 text-lg">Adicionar um Produto</Disclosure.Button>
-            <Disclosure.Panel className="text-gray-100">
-              <form onSubmit={insertProduct} className="flex justify-center flex-col gap-3">
-                <label>Nome:</label>
-                <input
-                  className="border border-black border-2 text-black bg-[#e7e7e7]"
-                  type="text"
-                  ref={productNameRef}
-                />
-                <label>Preço:</label>
-                <input
-                  className="border-black border-2 text-black bg-[#e7e7e7]"
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  ref={productPriceRef}
-                />
-                <label>Quantidade:</label>
-                <input
-                  className="border border-black border-2 text-black bg-[#e7e7e7]"
-                  type="number"
-                  min="1"
-                  ref={productQuantityRef}
-                />
-                <button type="submit">Adicionar</button>
-              </form>
-            </Disclosure.Panel>
-          </Disclosure>
+          <div>
+            <div className="flex items-center justify-center">
+              <button
+                onClick={openModal}
+                className="border rounded-full px-3 py-4 bg-white text-black font-bold hover:scale-110 "
+              >
+                Adicionar Um Produto
+              </button>
+            </div>
+
+            <Transition appear show={isOpen} as={Fragment}>
+              <Dialog as="div" className="relative z-10" onClose={closeModal}>
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="fixed inset-0 bg-black bg-opacity-25" />
+                </Transition.Child>
+
+                <div className="fixed inset-0 overflow-y-auto">
+                  <div className="flex min-h-full items-center justify-center p-4 text-center">
+                    <Transition.Child
+                      as={Fragment}
+                      enter="ease-out duration-300"
+                      enterFrom="opacity-0 scale-95"
+                      enterTo="opacity-100 scale-100"
+                      leave="ease-in duration-200"
+                      leaveFrom="opacity-100 scale-100"
+                      leaveTo="opacity-0 scale-95"
+                    >
+                      <Dialog.Panel className="w-[700px] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                        <Dialog.Title
+                          as="h3"
+                          className="md:text-left text-center font-bold text-[20px] "
+                        >
+                          Adicione Um Produto
+                        </Dialog.Title>
+                        <div className="mt-4 flex justify-center items-center font-bold">
+                          <form
+                            onSubmit={insertProduct}
+                            className="flex justify-center flex-col gap-3"
+                          >
+                            <label>Nome:</label>
+                            <input className="btn_class" type="text" ref={productNameRef} />
+                            <label>Preço:</label>
+                            <input
+                              className="btn_class"
+                              type="number"
+                              min="0"
+                              step="0.01"
+                              ref={productPriceRef}
+                            />
+                            <label>Quantidade:</label>
+                            <input
+                              className="btn_class"
+                              type="number"
+                              min="1"
+                              ref={productQuantityRef}
+                            />
+                            <button className="btn" type="submit">
+                              Adicionar
+                            </button>
+                          </form>
+                        </div>
+
+                        <button
+                          onClick={closeModal}
+                          className="absolute top-1 right-1 hover:bg-red-400 rounded-xl flex items-center"
+                        >
+                          <Image width={24} height={24} src="/Close.svg" alt="Close modal" />
+                        </button>
+                      </Dialog.Panel>
+                    </Transition.Child>
+                  </div>
+                </div>
+              </Dialog>
+            </Transition>
+          </div>
         </section>
       </div>
     </main>
