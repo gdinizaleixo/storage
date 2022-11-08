@@ -28,7 +28,6 @@ export default function UserAdm() {
             <h1>{user?.user_metadata.phone}</h1>
           </div>
           <div className="flex justify-center gap-2">
-            <button className="btn_options bg-white hover:bg-green-400">Salvar</button>
             <EditUser />
             <button className="btn_options bg-white hover:bg-red-400">Excluir</button>
           </div>

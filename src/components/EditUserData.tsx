@@ -1,12 +1,12 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
-import Link from "next/link";
-
+import { Fragment, useState, useRef } from "react";
+import { supabase } from "../utils/supabase";
+import { useAuth } from "../hooks/useAuth";
 import Image from "next/image";
 
 export default function EditUser() {
+  const { user } = useAuth();
   const [value, onChange] = useState(new Date());
-
   let [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
@@ -16,7 +16,46 @@ export default function EditUser() {
   function openModal() {
     setIsOpen(true);
   }
+  const passwordInputRef = useRef<HTMLInputElement>(null);
+  const confirmPasswordInputRef = useRef<HTMLInputElement>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const phoneInputRef = useRef<HTMLInputElement>(null);
+  const cpfInputRef = useRef<HTMLInputElement>(null);
 
+  async function UpdateUser() {
+    console.log("teste");
+    const userData = {
+      password: passwordInputRef.current?.value,
+      confirmPassword: confirmPasswordInputRef.current?.value,
+      name: nameInputRef.current?.value,
+      phone: phoneInputRef.current?.value,
+      cpf: cpfInputRef.current?.value,
+    };
+    console.log(userData);
+    if (!userData.name) {
+      nameInputRef.current?.focus();
+    }
+    if (!userData.phone) {
+      phoneInputRef.current?.focus();
+    }
+    if (!userData.cpf) {
+      cpfInputRef.current?.focus();
+    }
+    if (!userData.password) {
+      passwordInputRef.current?.focus();
+    }
+    if (!userData.confirmPassword) {
+      confirmPasswordInputRef.current?.focus();
+    }
+    if (userData.password !== userData.confirmPassword) {
+      confirmPasswordInputRef.current?.focus();
+    }
+    console.log("teste2");
+    const { user, error } = await supabase.auth.update({
+      password: userData.password,
+      data: { name: userData.name, phone: userData.phone, cpf: userData.cpf },
+    });
+  }
   return (
     <>
       <div className="">
@@ -57,35 +96,50 @@ export default function EditUser() {
                   <div className=" flex justify-center  flex-col font-bold gap-[20px] mt-[30px] ">
                     <div>
                       <h1 className="text-left">Nome</h1>
-                      <input className="btn_class" placeholder="Novo nome de Usuário"></input>
+                      <input
+                        className="btn_class"
+                        placeholder="Novo nome de Usuário"
+                        ref={nameInputRef}
+                      ></input>
                     </div>
                     <div>
                       <h1>CPF</h1>
-                      <input className="btn_class" placeholder="Digite seu CPF"></input>
-                    </div>
-                    <div>
-                      <h1 className="text-left">Email</h1>
-                      <input className="btn_class" placeholder="Digite seu Email"></input>
+                      <input
+                        className="btn_class"
+                        placeholder="Digite seu CPF"
+                        ref={cpfInputRef}
+                      ></input>
                     </div>
                     <div>
                       <h1 className="text-left">Telefone</h1>
-                      <input className="btn_class" placeholder="Digite seu Telefone"></input>
-                    </div>
-                    <div>
-                      <h1 className="text-left">Digite sua Senha</h1>
-                      <input className="btn_class" placeholder="Digite sua Senha"></input>
+                      <input
+                        className="btn_class"
+                        placeholder="Digite seu Telefone"
+                        ref={phoneInputRef}
+                      ></input>
                     </div>
                     <div>
                       <h1 className="text-left">Nova Senha</h1>
-                      <input className="btn_class" placeholder="Digite sua Nova Senha"></input>
+                      <input
+                        className="btn_class"
+                        placeholder="Digite sua Nova Senha"
+                        ref={passwordInputRef}
+                      ></input>
                     </div>
                     <div>
                       <h1 className="text-left">Confirme a Senha</h1>
-                      <input className="btn_class" placeholder="Confirme sua Senha"></input>
+                      <input
+                        className="btn_class"
+                        placeholder="Confirme sua Senha"
+                        ref={confirmPasswordInputRef}
+                      ></input>
                     </div>
 
                     <div>
-                      <button className="w-full h-[45px] rounded-[30px] border-[1px] px-3 py-1 bg-black text-white font-bold ">
+                      <button
+                        className="w-full h-[45px] rounded-[30px] border-[1px] px-3 py-1 bg-black text-white font-bold"
+                        onClick={UpdateUser}
+                      >
                         Atualizar Dados
                       </button>
                     </div>

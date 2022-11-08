@@ -19,12 +19,6 @@ export default function SignAdm() {
       cpf: cpfInputRef.current?.value,
     };
     console.log(userData);
-    if (!userData.email) {
-      emailInputRef.current?.focus();
-    }
-    if (!userData.password) {
-      passwordInputRef.current?.focus();
-    }
     if (!userData.name) {
       nameInputRef.current?.focus();
     }
@@ -33,6 +27,12 @@ export default function SignAdm() {
     }
     if (!userData.cpf) {
       cpfInputRef.current?.focus();
+    }
+    if (!userData.email) {
+      emailInputRef.current?.focus();
+    }
+    if (!userData.password) {
+      passwordInputRef.current?.focus();
     }
     console.log("teste2");
     const { error } = await supabase.auth.signUp(
