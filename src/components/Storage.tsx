@@ -1,7 +1,6 @@
 import { FormEvent, Fragment, useEffect, useRef, useState } from "react";
 import { Product } from "../types/Product";
 import { supabase } from "../utils/supabase";
-import { Disclosure, Menu } from "@headlessui/react";
 import { FaTrashAlt } from "react-icons/fa";
 import { AiFillEdit } from "react-icons/ai";
 import { Dialog, Transition } from "@headlessui/react";
@@ -71,13 +70,9 @@ export default function Storage() {
     productNameRef.current.value = "";
     productPriceRef.current.value = "";
     productQuantityRef.current.value = "";
-    function handleInsert() {
-      const currentTableData = tableData ?? [];
-      setTableData([
-        ...currentTableData,
-        { product_id: currentTableData[currentTableData.length - 1].product_id + 1, ...newProduct },
-      ]);
-    }
+    selectProduct()
+        .then((data) => setTableData(data))
+        .catch((err) => console.error(err));
   }
 
   async function selectProduct() {
@@ -87,6 +82,9 @@ export default function Storage() {
 
   async function deleteProduct(product_id: number) {
     const { data, error } = await supabase.from("product").delete().match({ product_id });
+      selectProduct()
+        .then((data) => setTableData(data))
+        .catch((err) => console.error(err));
   }
 
   useEffect(() => {

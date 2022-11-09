@@ -1,4 +1,4 @@
-import { FormEvent, useRef } from "react";
+import { useRef } from "react";
 import { supabase } from "../utils/supabase";
 
 export default function SignAdm() {
@@ -8,8 +8,7 @@ export default function SignAdm() {
   const phoneInputRef = useRef<HTMLInputElement>(null);
   const cpfInputRef = useRef<HTMLInputElement>(null);
 
-  async function signIn(evt: FormEvent) {
-    evt.preventDefault();
+  async function signIn() {
     console.log("teste");
     const userData = {
       email: emailInputRef.current?.value,

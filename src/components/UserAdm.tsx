@@ -5,7 +5,6 @@ import EditUser from "./EditUserData";
 
 export default function UserAdm() {
   const user = supabase.auth.user();
-  console.log(user?.user_metadata.adm);
   return (
     <main className="flex justify-center mt-20 h-screen">
       <div>
@@ -27,9 +26,8 @@ export default function UserAdm() {
             <h1>Telefone:</h1>
             <h1>{user?.user_metadata.phone}</h1>
           </div>
-          <div className="flex justify-center gap-2">
+          <div className="flex justify-center">
             <EditUser />
-            <button className="btn_options bg-white hover:bg-red-400">Excluir</button>
           </div>
         </section>
       </div>
