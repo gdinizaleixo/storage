@@ -1,11 +1,9 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState, useRef } from "react";
 import { supabase } from "../utils/supabase";
-import { useAuth } from "../hooks/useAuth";
 import Image from "next/image";
 
 export default function EditUser() {
-  const { user } = useAuth();
   const [value, onChange] = useState(new Date());
   let [isOpen, setIsOpen] = useState(false);
 
@@ -16,13 +14,14 @@ export default function EditUser() {
   function openModal() {
     setIsOpen(true);
   }
+
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const confirmPasswordInputRef = useRef<HTMLInputElement>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
   const phoneInputRef = useRef<HTMLInputElement>(null);
   const cpfInputRef = useRef<HTMLInputElement>(null);
 
-  async function UpdateUser() {
+  async function updateUser() {
     console.log("teste");
     const userData = {
       password: passwordInputRef.current?.value,
@@ -34,27 +33,33 @@ export default function EditUser() {
     console.log(userData);
     if (!userData.name) {
       nameInputRef.current?.focus();
-    }
-    if (!userData.phone) {
-      phoneInputRef.current?.focus();
+      return;
     }
     if (!userData.cpf) {
       cpfInputRef.current?.focus();
+      return;
+    }
+    if (!userData.phone) {
+      phoneInputRef.current?.focus();
+      return;
     }
     if (!userData.password) {
       passwordInputRef.current?.focus();
+      return;
     }
     if (!userData.confirmPassword) {
       confirmPasswordInputRef.current?.focus();
+      return;
     }
     if (userData.password !== userData.confirmPassword) {
       confirmPasswordInputRef.current?.focus();
+      return;
     }
-    console.log("teste2");
     const { user, error } = await supabase.auth.update({
       password: userData.password,
       data: { name: userData.name, phone: userData.phone, cpf: userData.cpf },
     });
+    closeModal();
   }
   return (
     <>
@@ -138,7 +143,7 @@ export default function EditUser() {
                     <div>
                       <button
                         className="w-full h-[45px] rounded-[30px] border-[1px] px-3 py-1 bg-black text-white font-bold"
-                        onClick={UpdateUser}
+                        onClick={updateUser}
                       >
                         Atualizar Dados
                       </button>

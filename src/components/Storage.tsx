@@ -11,9 +11,7 @@ export default function Storage() {
   const productPriceRef = useRef<HTMLInputElement>(null);
   const productQuantityRef = useRef<HTMLInputElement>(null);
   const [tableData, setTableData] = useState<Product[] | null>(null);
-
   const [value, onChange] = useState(new Date());
-
   const [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
@@ -29,18 +27,15 @@ export default function Storage() {
     currency: "BRL",
   });
 
-  useEffect(() => {
-    const subscription = supabase
-      .from("product")
-      .on("INSERT", console.log)
-      .on("UPDATE", console.log)
-      .on("DELETE", console.log)
-      .subscribe();
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
-
+  async function selectProduct() {
+    const { data } = await supabase.from<Product>("product").select().throwOnError();
+    return data;
+  }
+  function handleChange() {
+    selectProduct()
+      .then((data) => setTableData(data))
+      .catch((err) => console.error(err));
+  }
   async function insertProduct(e: FormEvent) {
     e.preventDefault();
     const productName = productNameRef.current?.value;
@@ -70,21 +65,13 @@ export default function Storage() {
     productNameRef.current.value = "";
     productPriceRef.current.value = "";
     productQuantityRef.current.value = "";
-    selectProduct()
-        .then((data) => setTableData(data))
-        .catch((err) => console.error(err));
-  }
-
-  async function selectProduct() {
-    const { data } = await supabase.from<Product>("product").select().throwOnError();
-    return data;
+    handleChange();
+    closeModal();
   }
 
   async function deleteProduct(product_id: number) {
     const { data, error } = await supabase.from("product").delete().match({ product_id });
-      selectProduct()
-        .then((data) => setTableData(data))
-        .catch((err) => console.error(err));
+    handleChange();
   }
 
   useEffect(() => {

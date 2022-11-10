@@ -1,5 +1,3 @@
-import { useAuth } from "../hooks/useAuth";
-import { useRef, useState, useEffect } from "react";
 import { supabase } from "../utils/supabase";
 import EditUser from "./EditUserData";
 

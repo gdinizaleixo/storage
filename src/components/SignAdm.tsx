@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, FormEvent } from "react";
 import { supabase } from "../utils/supabase";
 
 export default function SignAdm() {
@@ -8,8 +8,8 @@ export default function SignAdm() {
   const phoneInputRef = useRef<HTMLInputElement>(null);
   const cpfInputRef = useRef<HTMLInputElement>(null);
 
-  async function signIn() {
-    console.log("teste");
+  async function signIn(e: FormEvent) {
+    e.preventDefault();
     const userData = {
       email: emailInputRef.current?.value,
       password: passwordInputRef.current?.value,
@@ -20,20 +20,40 @@ export default function SignAdm() {
     console.log(userData);
     if (!userData.name) {
       nameInputRef.current?.focus();
+      return;
     }
     if (!userData.phone) {
       phoneInputRef.current?.focus();
+      return;
     }
     if (!userData.cpf) {
       cpfInputRef.current?.focus();
+      return;
     }
     if (!userData.email) {
       emailInputRef.current?.focus();
+      return;
     }
     if (!userData.password) {
       passwordInputRef.current?.focus();
+      return;
     }
-    console.log("teste2");
+    if (emailInputRef.current?.value != undefined) {
+      emailInputRef.current.value = "";
+    }
+    if (nameInputRef.current?.value != undefined) {
+      nameInputRef.current.value = "";
+    }
+    if (phoneInputRef.current?.value != undefined) {
+      phoneInputRef.current.value = "";
+    }
+    if (cpfInputRef.current?.value != undefined) {
+      cpfInputRef.current.value = "";
+    }
+    if (passwordInputRef.current?.value != undefined) {
+      passwordInputRef.current.value = "";
+    }
+
     const { error } = await supabase.auth.signUp(
       {
         email: userData.email,
@@ -55,10 +75,7 @@ export default function SignAdm() {
         <img src="/Logo_inicial.svg" />
       </div>
 
-      <form
-        onSubmit={signIn}
-        className="flex flex-col gap-3 text-xl bg-white  border rounded-[20px] p-[20px] w-[300px] h-[600px] mt-[50px] mb-[50px] md:h-[650px] md:w-[500px]"
-      >
+      <form className="flex flex-col gap-3 text-xl bg-white  border rounded-[20px] p-[20px] w-[300px] h-[600px] mt-[50px] mb-[50px] md:h-[650px] md:w-[500px]">
         <h1 className="md:text-4xl text-3xl text-center md:text-left decoration-double font-medium">
           Criar outra Conta
         </h1>

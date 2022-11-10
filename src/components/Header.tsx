@@ -21,7 +21,9 @@ export default function Header() {
               src="/logo.svg"
               alt=""
             />
-            <p className="mx-3">Sullivan</p>
+            <Link href="storage" className="text-x1">
+              <a className="mx-3 text-x1 hover:opacity-60 duration-500">Sullivan</a>
+            </Link>
           </div>
           <Sandwich />
         </div>
@@ -31,8 +33,10 @@ export default function Header() {
               <a className="text-x1 hover:opacity-60 duration-500">Agenda</a>
             </Link>
           </li>
-          <li className="mx-4 my-6 md:my-0 hover:opacity-60 duration-500">
-            <a href="storage">Estoque</a>
+          <li className="mx-4 my-6 md:my-0">
+            <Link href="storage" className="text-x1">
+              <a className="text-x1 hover:opacity-60 duration-500">Estoque</a>
+            </Link>
           </li>
           <li className="mx-4 my-6 md:my-0">
             <Account />

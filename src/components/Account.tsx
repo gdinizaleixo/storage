@@ -3,7 +3,6 @@ import { supabase } from "../utils/supabase";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import Router from "next/router";
 import Link from "next/link";
 
 export default function BasicMenu() {
