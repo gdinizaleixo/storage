@@ -86,7 +86,7 @@ export default function Storage() {
       closeModal();
       return toast.success("Produto Adicionado");
     } catch (error) {
-      return toast.error("Algo deu");
+      return toast.error("Algo deu Errado");
     }
   }
 

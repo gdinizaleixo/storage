@@ -9,10 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.4",
-    "@emotion/styled": "^11.10.4",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
     "@headlessui/react": "^1.7.4",
-    "@mui/material": "^5.10.10",
+    "@mui/icons-material": "^5.10.9",
+    "@mui/material": "^5.10.13",
     "@mui/styled-engine-sc": "^5.10.6",
     "@radix-ui/react-dialog": "^1.0.2",
     "@supabase/supabase-js": "^1.35.4",
