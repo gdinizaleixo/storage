@@ -1,5 +1,11 @@
 import { User } from "@supabase/supabase-js";
-import { createContext, useState, useEffect, ReactNode, useContext } from "react";
+import {
+  createContext,
+  useState,
+  useEffect,
+  ReactNode,
+  useContext,
+} from "react";
 import { supabase } from "../utils/supabase";
 
 type AuthContext = {
@@ -13,7 +19,9 @@ type AuthProviderProps = {
 };
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User | null>(supabase.auth.session()?.user ?? null);
+  const [user, setUser] = useState<User | null>(
+    supabase.auth.session()?.user ?? null
+  );
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
@@ -21,5 +29,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     });
   }, []);
 
-  return <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+  );
 }

@@ -1,5 +1,7 @@
 import { useRef, FormEvent } from "react";
 import { supabase } from "../utils/supabase";
+import { toast } from "react-toastify";
+import { Router } from "next/router";
 
 export default function SignAdm() {
   const emailInputRef = useRef<HTMLInputElement>(null);
@@ -89,8 +91,15 @@ export default function SignAdm() {
         <input className=" btn_class" type="text" ref={emailInputRef} />
         <label>Senha:</label>
         <input className=" btn_class" type="password" ref={passwordInputRef} />
-        <button className="btn" type="submit" onClick={signIn}>
-          Log In
+        <button
+          className="btn"
+          type="submit"
+          onClick={() => {
+            signIn;
+            toast.success("Dados Atualizados com Sucesso");
+          }}
+        >
+          Sign In
         </button>
       </form>
     </div>

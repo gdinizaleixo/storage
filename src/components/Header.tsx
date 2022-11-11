@@ -22,7 +22,9 @@ export default function Header() {
               alt=""
             />
             <Link href="storage" className="text-x1">
-              <a className="mx-3 text-x1 hover:opacity-60 duration-500">Sullivan</a>
+              <a className="mx-3 text-x1 hover:opacity-60 duration-500">
+                Sullivan
+              </a>
             </Link>
           </div>
           <Sandwich />

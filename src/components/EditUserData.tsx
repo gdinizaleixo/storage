@@ -2,6 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState, useRef } from "react";
 import { supabase } from "../utils/supabase";
 import Image from "next/image";
+import { toast } from "react-toastify";
 
 export default function EditUser() {
   const [value, onChange] = useState(new Date());
@@ -64,7 +65,10 @@ export default function EditUser() {
   return (
     <>
       <div className="">
-        <button onClick={openModal} className="btn_options bg-white hover:bg-blue-400">
+        <button
+          onClick={openModal}
+          className="btn_options bg-white hover:bg-blue-400"
+        >
           Editar
         </button>
       </div>
@@ -95,7 +99,10 @@ export default function EditUser() {
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className="w-[500px] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title as="h3" className="flex justify-center font-bold text-[20px]">
+                  <Dialog.Title
+                    as="h3"
+                    className="flex justify-center font-bold text-[20px]"
+                  >
                     Editar Dados Cadastrados
                   </Dialog.Title>
                   <div className=" flex justify-center  flex-col font-bold gap-[20px] mt-[30px] ">
@@ -143,7 +150,10 @@ export default function EditUser() {
                     <div>
                       <button
                         className="w-full h-[45px] rounded-[30px] border-[1px] px-3 py-1 bg-black text-white font-bold"
-                        onClick={updateUser}
+                        onClick={() => {
+                          updateUser();
+                          toast.success("Produto deletado com Sucesso!");
+                        }}
                       >
                         Atualizar Dados
                       </button>
