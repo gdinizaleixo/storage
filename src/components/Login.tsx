@@ -2,12 +2,14 @@ import { FormEvent, useRef, useEffect } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { supabase } from "../utils/supabase";
 import Router from "next/router";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const { user } = useAuth();
   useEffect(() => {
     if (user?.user_metadata.adm) {
       Router.push("/agenda");
+      toast.success("Bem Vindo");
     } else {
       signOut;
       console.log("Sucumba daqui");
