@@ -70,6 +70,7 @@ export default function SignAdm() {
         },
       }
     );
+    toast.success("Conta Criada com Sucesso");
   }
   return (
     <div className="flex md:flex-row  md:justify-around items-center flex-col text-black font-bold ">
@@ -91,14 +92,7 @@ export default function SignAdm() {
         <input className=" btn_class" type="text" ref={emailInputRef} />
         <label>Senha:</label>
         <input className=" btn_class" type="password" ref={passwordInputRef} />
-        <button
-          className="btn"
-          type="submit"
-          onClick={() => {
-            signIn;
-            toast.success("Dados Atualizados com Sucesso");
-          }}
-        >
+        <button className="btn" type="submit" onClick={signIn}>
           Sign In
         </button>
       </form>

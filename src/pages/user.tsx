@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import Router from "next/router";
-import dynamic from "next/dynamic";
 import { useAuth } from "../hooks/useAuth";
 import Header from "../components/Header";
+import dynamic from "next/dynamic";
 const UserAdm = dynamic(() => import("../components/UserAdm"), { ssr: false });
 export default function App() {
   const { user } = useAuth();
