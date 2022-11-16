@@ -61,6 +61,7 @@ export default function EditUser() {
       data: { name: userData.name, phone: userData.phone, cpf: userData.cpf },
     });
     closeModal();
+    toast.success("Dados Atualizados com Sucesso!");
   }
   return (
     <>
@@ -152,7 +153,6 @@ export default function EditUser() {
                         className="w-full h-[45px] rounded-[30px] border-[1px] px-3 py-1 bg-black text-white font-bold"
                         onClick={() => {
                           updateUser();
-                          toast.success("Produto deletado com Sucesso!");
                         }}
                       >
                         Atualizar Dados

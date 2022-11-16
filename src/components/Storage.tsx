@@ -6,6 +6,14 @@ import { AiFillEdit } from "react-icons/ai";
 import { Dialog, Transition } from "@headlessui/react";
 import Image from "next/image";
 import { toast } from "react-toastify";
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { Spinner, ArrowDown, ArrowUp } from "phosphor-react";
 
 export default function Storage() {
   const productNameRef = useRef<HTMLInputElement>(null);
@@ -16,6 +24,151 @@ export default function Storage() {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenDelete, setIsOpenDelete] = useState(false);
   const [itemId, setItemId] = useState<number | undefined>();
+
+  const columnHelper = createColumnHelper<any>();
+
+  const columns = [
+    columnHelper.accessor("product_name", {
+      header: "Produto",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("product_price", {
+      header: "Preço",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("product_quantity", {
+      header: () => "Quantidade",
+      cell: (info) => info.renderValue(),
+    }),
+    columnHelper.accessor("product_edit", {
+      header: () => "Editar",
+      cell: (info) => info.renderValue(),
+    }),
+    columnHelper.accessor("product_delete", {
+      header: () => "Deletar",
+      cell: (info) => info.renderValue(),
+    }),
+  ];
+
+  //TABELA DE ESTOQUE COM PAGINAÇÃO
+
+  function TabelaEstoque() {
+    const [data, setData] = useState<any>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const table = useReactTable({
+      data,
+      columns,
+      getCoreRowModel: getCoreRowModel(),
+      getSortedRowModel: getSortedRowModel(),
+    });
+
+    useEffect(() => {
+      selectProduct()
+        .then((data) => {
+          setData(data);
+          setIsLoading(false);
+        })
+        .catch((err) => console.error(err));
+    }, []);
+
+    if (isLoading) {
+      return <Spinner className="h-8 w-8 animate-spin" />;
+    }
+
+    console.log(
+      table
+        .getRowModel()
+        .rows.map((row) =>
+          row.getVisibleCells().map((cell) => console.log(cell.row))
+        )
+    );
+
+    return (
+      <div className="p-2">
+        <table>
+          <thead>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th key={header.id} colSpan={header.colSpan}>
+                    <button
+                      type="button"
+                      className="cursor-pointer select-none px-5"
+                      onClick={header.column.getToggleSortingHandler()}
+                    >
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                      {{
+                        asc: <ArrowUp className="w-4 h-4 ml-2 inline-block" />,
+                        desc: (
+                          <ArrowDown className="w-4 h-4 ml-2 inline-block" />
+                        ),
+                      }[header.column.getIsSorted() as string] ?? null}
+                    </button>
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <tr key={row.id}>
+                {row.getVisibleCells().map((cell) => {
+                  if (cell.column.id == "product_edit") {
+                    return (
+                      <td className="text-center">
+                        <button className="">
+                          <AiFillEdit />
+                        </button>
+                      </td>
+                    );
+                  } else if (cell.column.id == "product_delete") {
+                    return (
+                      <td className="text-center">
+                        <button
+                          className=""
+                          onClick={() => {
+                            openModalDelete();
+                            setItemId(cell.row.original.product_id);
+                          }}
+                        >
+                          <FaTrashAlt />
+                        </button>
+                      </td>
+                    );
+                  } else
+                    return (
+                      <td key={cell.id} className="text-center">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    );
+                })}
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            {table.getFooterGroups().map((footerGroup) => (
+              <tr key={footerGroup.id}>
+                {footerGroup.headers.map((header) => (
+                  <th key={header.id}>
+                    {flexRender(
+                      header.column.columnDef.footer,
+                      header.getContext()
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </tfoot>
+        </table>
+      </div>
+    );
+  }
 
   function closeModal() {
     setIsOpen(false);
@@ -45,11 +198,13 @@ export default function Storage() {
       .throwOnError();
     return data;
   }
+
   function handleChange() {
     selectProduct()
       .then((data) => setTableData(data))
       .catch((err) => console.error(err));
   }
+
   async function insertProduct(e: FormEvent) {
     e.preventDefault();
     const productName = productNameRef.current?.value;
@@ -111,41 +266,7 @@ export default function Storage() {
           <h1 className="text-5xl mt-20 decoration-double font-medium text-center ">
             Estoque
           </h1>
-          <table className="tb_estoque">
-            <thead>
-              <tr>
-                <th className="tb_estoque">Nome do produto</th>
-                <th className="tb_estoque">Preço</th>
-                <th className="tb_estoque">Quantidade</th>
-              </tr>
-            </thead>
-
-            {tableData?.map((tableData) => (
-              <tbody key={tableData.product_id}>
-                <tr>
-                  <td className="tb_estoque">{tableData.product_name}</td>
-                  <td className="tb_estoque">
-                    {formatter.format(tableData.product_price)}
-                  </td>
-                  <td className="tb_estoque">{tableData.product_quantity}</td>
-                  <td className="tb_estoque">
-                    <button className="px-2">
-                      <AiFillEdit />
-                    </button>
-                    <button
-                      className="px-2"
-                      onClick={() => {
-                        openModalDelete();
-                        setItemId(tableData.product_id);
-                      }}
-                    >
-                      <FaTrashAlt />
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            ))}
-          </table>
+          <TabelaEstoque />
           <div>
             <div className="flex items-center justify-center">
               <button
