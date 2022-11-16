@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Link from "next/link";
+import { toast } from "react-toastify";
 
 export default function BasicMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -17,11 +18,12 @@ export default function BasicMenu() {
   async function signOut() {
     const { error } = await supabase.auth.signOut();
     console.log(error);
+    toast.success("Deslogado com Sucesso");
   }
 
   return (
     <div>
-      <Button
+      <button
         id=""
         aria-controls={open ? "basic-menu" : undefined}
         aria-haspopup="true"
@@ -30,7 +32,7 @@ export default function BasicMenu() {
         className="text-black text-[16px] capitalize border-[1px] bg-white rounded-[30px] px-3 py-1 font-bold hover:bg-white"
       >
         Conta
-      </Button>
+      </button>
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}

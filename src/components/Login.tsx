@@ -42,6 +42,7 @@ export default function Login() {
       password,
     });
     console.log(error);
+    if (error) toast.error("Login Invalido");
     emailInputRef.current.value = "";
     passwordInputRef.current.value = "";
   }
