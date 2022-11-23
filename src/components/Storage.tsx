@@ -23,6 +23,7 @@ export default function Storage() {
   const [value, onChange] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenDelete, setIsOpenDelete] = useState(false);
+  const [isOpenUpdate, setIsOpenUpdate] = useState(false);
   const [itemId, setItemId] = useState<number | undefined>();
 
   const columnHelper = createColumnHelper<any>();
@@ -75,40 +76,51 @@ export default function Storage() {
       return <Spinner className="h-8 w-8 animate-spin" />;
     }
 
-    console.log(
-      table
-        .getRowModel()
-        .rows.map((row) =>
-          row.getVisibleCells().map((cell) => console.log(cell.row))
-        )
-    );
-
     return (
       <div className="p-2">
         <table>
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th key={header.id} colSpan={header.colSpan}>
-                    <button
-                      type="button"
-                      className="cursor-pointer select-none px-5"
-                      onClick={header.column.getToggleSortingHandler()}
-                    >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                      {{
-                        asc: <ArrowUp className="w-4 h-4 ml-2 inline-block" />,
-                        desc: (
-                          <ArrowDown className="w-4 h-4 ml-2 inline-block" />
-                        ),
-                      }[header.column.getIsSorted() as string] ?? null}
-                    </button>
-                  </th>
-                ))}
+                {headerGroup.headers.map((header) => {
+                  if (
+                    header.id === "product_edit" ||
+                    header.id === "product_delete"
+                  ) {
+                    return (
+                      <th key={header.id} colSpan={header.colSpan}>
+                        <div className=" select-none px-5">
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                        </div>
+                      </th>
+                    );
+                  } else
+                    return (
+                      <th key={header.id} colSpan={header.colSpan}>
+                        <button
+                          type="button"
+                          className="cursor-pointer select-none px-5"
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                          {{
+                            asc: (
+                              <ArrowUp className="w-4 h-4 ml-2 inline-block" />
+                            ),
+                            desc: (
+                              <ArrowDown className="w-4 h-4 ml-2 inline-block" />
+                            ),
+                          }[header.column.getIsSorted() as string] ?? null}
+                        </button>
+                      </th>
+                    );
+                })}
               </tr>
             ))}
           </thead>
@@ -119,7 +131,13 @@ export default function Storage() {
                   if (cell.column.id == "product_edit") {
                     return (
                       <td className="text-center">
-                        <button className="">
+                        <button
+                          className=""
+                          onClick={() => {
+                            openModalUpdate();
+                            setItemId(cell.row.original.product_id);
+                          }}
+                        >
                           <AiFillEdit />
                         </button>
                       </td>
@@ -176,6 +194,14 @@ export default function Storage() {
 
   function openModal() {
     setIsOpen(true);
+  }
+
+  function closeModalUpdate() {
+    setIsOpenUpdate(false);
+  }
+
+  function openModalUpdate() {
+    setIsOpenUpdate(true);
   }
 
   function closeModalDelete() {
@@ -243,6 +269,25 @@ export default function Storage() {
     } catch (error) {
       return toast.error("Algo deu Errado");
     }
+  }
+
+  async function updateProduct(product_id: number | undefined) {
+    const modified = {
+      product_name: productNameRef.current?.value,
+      product_quantity: productQuantityRef.current?.value,
+      product_price: productPriceRef.current?.value,
+    };
+
+    const { data, error } = await supabase
+      .from("product")
+      .update(modified)
+      .match({ product_id });
+    if (error) {
+      return toast.error("Preencha algo valído");
+    }
+    toast.success("Produto editado com sucesso");
+    handleChange();
+    setIsOpenUpdate(false);
   }
 
   async function deleteProduct(product_id: number | undefined) {
@@ -418,6 +463,94 @@ export default function Storage() {
 
                         <button
                           onClick={closeModalDelete}
+                          className="absolute top-1 right-1 hover:bg-red-400 rounded-xl flex items-center"
+                        >
+                          <Image
+                            width={24}
+                            height={24}
+                            src="/Close.svg"
+                            alt="Close modal"
+                          />
+                        </button>
+                      </Dialog.Panel>
+                    </Transition.Child>
+                  </div>
+                </div>
+              </Dialog>
+            </Transition>
+
+            {/* SEPARA MODAISSSSSSSSSSSSSSSSSSSSS */}
+
+            <Transition appear show={isOpenUpdate} as={Fragment}>
+              <Dialog
+                as="div"
+                className="relative z-10"
+                onClose={closeModalUpdate}
+              >
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="fixed inset-0 bg-black bg-opacity-25" />
+                </Transition.Child>
+
+                <div className="fixed inset-0 overflow-y-auto">
+                  <div className="flex min-h-full items-center justify-center p-4 text-center">
+                    <Transition.Child
+                      as={Fragment}
+                      enter="ease-out duration-300"
+                      enterFrom="opacity-0 scale-95"
+                      enterTo="opacity-100 scale-100"
+                      leave="ease-in duration-200"
+                      leaveFrom="opacity-100 scale-100"
+                      leaveTo="opacity-0 scale-95"
+                    >
+                      <Dialog.Panel className="w-[700px] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                        <Dialog.Title
+                          as="h3"
+                          className=" text-center font-bold text-[20px] "
+                        >
+                          Editar dados
+                        </Dialog.Title>
+                        <div className="mt-4 flex justify-center items-center font-bold">
+                          <div className="flex justify-center flex-col gap-3">
+                            <label>Nome:</label>
+                            <input
+                              className="btn_class"
+                              type="text"
+                              ref={productNameRef}
+                            />
+                            <label>Preço:</label>
+                            <input
+                              className="btn_class"
+                              type="number"
+                              min="0"
+                              step="0.01"
+                              ref={productPriceRef}
+                            />
+                            <label>Quantidade:</label>
+                            <input
+                              className="btn_class"
+                              type="number"
+                              min="1"
+                              ref={productQuantityRef}
+                            />
+                            <button
+                              className="btn"
+                              onClick={() => updateProduct(itemId)}
+                            >
+                              Editar
+                            </button>
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={closeModalUpdate}
                           className="absolute top-1 right-1 hover:bg-red-400 rounded-xl flex items-center"
                         >
                           <Image
