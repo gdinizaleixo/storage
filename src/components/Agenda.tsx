@@ -27,7 +27,7 @@ export default function Agenda() {
     }),
     columnHelper.accessor("agenda_time", {
       header: () => "Hora",
-      cell: (info) => info.renderValue().substring(0, 5),
+      cell: (info) => info.renderValue()?.substring(0, 5),
     }),
     columnHelper.accessor("agenda_user_phone", {
       header: () => "Telefone",
@@ -38,8 +38,6 @@ export default function Agenda() {
       cell: (info) => info.renderValue(),
     }),
   ];
-
-  //TABELA DE ESTOQUE COM PAGINAÇÃO
 
   function TabelaAgendamentos() {
     const [data, setData] = useState<any>([]);
@@ -71,17 +69,11 @@ export default function Agenda() {
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
-                  if (
-                    header.id === "agenda_user_phone" ||
-                    header.id === "agenda_service"
-                  ) {
+                  if (header.id === "agenda_user_phone" || header.id === "agenda_service") {
                     return (
                       <th key={header.id} colSpan={header.colSpan}>
                         <div className=" select-none px-5">
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          {flexRender(header.column.columnDef.header, header.getContext())}
                         </div>
                       </th>
                     );
@@ -93,17 +85,10 @@ export default function Agenda() {
                           className="cursor-pointer select-none px-5"
                           onClick={header.column.getToggleSortingHandler()}
                         >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          {flexRender(header.column.columnDef.header, header.getContext())}
                           {{
-                            asc: (
-                              <ArrowUp className="w-4 h-4 ml-2 inline-block" />
-                            ),
-                            desc: (
-                              <ArrowDown className="w-4 h-4 ml-2 inline-block" />
-                            ),
+                            asc: <ArrowUp className="w-4 h-4 ml-2 inline-block" />,
+                            desc: <ArrowDown className="w-4 h-4 ml-2 inline-block" />,
                           }[header.column.getIsSorted() as string] ?? null}
                         </button>
                       </th>
@@ -118,10 +103,7 @@ export default function Agenda() {
                 {row.getVisibleCells().map((cell) => {
                   return (
                     <td key={cell.id} className="text-center">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   );
                 })}
@@ -133,10 +115,7 @@ export default function Agenda() {
               <tr key={footerGroup.id}>
                 {footerGroup.headers.map((header) => (
                   <th key={header.id}>
-                    {flexRender(
-                      header.column.columnDef.footer,
-                      header.getContext()
-                    )}
+                    {flexRender(header.column.columnDef.footer, header.getContext())}
                   </th>
                 ))}
               </tr>
@@ -147,10 +126,7 @@ export default function Agenda() {
     );
   }
   async function getAgendamentos() {
-    const { data } = await supabase
-      .from<Agended | null>("agenda")
-      .select()
-      .throwOnError();
+    const { data } = await supabase.from<Agended | null>("agenda").select().throwOnError();
     return data;
   }
 
