@@ -82,32 +82,55 @@ export default function Storage() {
     }
 
     return (
-      <div className="p-2">
-        <table>
+      <div className="p-0 md:p-2 flex flex-col items-center justify-center">
+        <table className="w-full md:w-fit border-white border-solid border-2 ">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
-                  if (header.id === "product_edit" || header.id === "product_delete") {
+                  if (
+                    header.id === "product_edit" ||
+                    header.id === "product_delete"
+                  ) {
                     return (
-                      <th key={header.id} colSpan={header.colSpan}>
-                        <div className=" select-none px-5">
-                          {flexRender(header.column.columnDef.header, header.getContext())}
+                      <th
+                        key={header.id}
+                        colSpan={header.colSpan}
+                        className="w-fit  border-solid border-white border-b-2 text-[12px] md:text-lg"
+                      >
+                        {/* Lugar aonde fica a tabela dos icones */}
+                        <div className=" select-none px-0 md:px-5">
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                         </div>
                       </th>
                     );
                   } else
                     return (
-                      <th key={header.id} colSpan={header.colSpan}>
+                      <th
+                        key={header.id}
+                        colSpan={header.colSpan}
+                        className="w-fit border-solid border-white border-b-2 text-[12px] md:text-lg"
+                      >
+                        {/* Lugar aonde fica a tabela dos campos, PRODUTO, PREÇO, QTD */}
                         <button
                           type="button"
-                          className="cursor-pointer select-none px-5"
+                          className="cursor-pointer select-none px-0 md:px-5 md:w-[170px]"
                           onClick={header.column.getToggleSortingHandler()}
                         >
-                          {flexRender(header.column.columnDef.header, header.getContext())}
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                           {{
-                            asc: <ArrowUp className="w-4 h-4 ml-2 inline-block" />,
-                            desc: <ArrowDown className="w-4 h-4 ml-2 inline-block" />,
+                            asc: (
+                              <ArrowUp className="w-4 h-4 ml-2 inline-block" />
+                            ),
+                            desc: (
+                              <ArrowDown className="w-4 h-4 ml-2 inline-block" />
+                            ),
                           }[header.column.getIsSorted() as string] ?? null}
                         </button>
                       </th>
@@ -117,53 +140,74 @@ export default function Storage() {
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => {
-                  if (cell.column.id == "product_edit") {
-                    return (
-                      <td className="text-center">
-                        <button
-                          className=""
-                          onClick={() => {
-                            openModalUpdate();
-                            setItemId(cell.row.original.product_id);
-                          }}
+            {table.getRowModel().rows.map((row, index: number) => {
+              let tableBackground;
+              if (index % 2 == 0) {
+                tableBackground = "bg-zinc-800";
+              } else {
+                tableBackground = "bg-zinc-900";
+              }
+              return (
+                <tr key={row.id} className={tableBackground}>
+                  {row.getVisibleCells().map((cell) => {
+                    if (cell.column.id == "product_edit") {
+                      return (
+                        <td className=" text-center md:w-fit border-solid border-white border-b-2 text-[12px] md:text-lg ">
+                          {/* Lugar aonde fica a tabela do icone de editar */}
+                          <button
+                            className=""
+                            onClick={() => {
+                              openModalUpdate();
+                              setItemId(cell.row.original.product_id);
+                            }}
+                          >
+                            <AiFillEdit />
+                          </button>
+                        </td>
+                      );
+                    } else if (cell.column.id == "product_delete") {
+                      return (
+                        <td className=" text-center md:w-fit border-solid border-white border-b-2 text-[12px] md:text-lg px-2 ">
+                          <button
+                            className=""
+                            onClick={() => {
+                              openModalDelete();
+                              setItemId(cell.row.original.product_id);
+                            }}
+                          >
+                            {/* Lugar aonde fica a tabela do icone excluir */}
+                            <FaTrashAlt />
+                          </button>
+                        </td>
+                      );
+                    } else
+                      return (
+                        <td
+                          key={cell.id}
+                          className="text-center w-[15ch] md:h-[70px] border-solid border-white border-b-2 text-[12px] md:text-lg
+                          "
                         >
-                          <AiFillEdit />
-                        </button>
-                      </td>
-                    );
-                  } else if (cell.column.id == "product_delete") {
-                    return (
-                      <td className="text-center">
-                        <button
-                          className=""
-                          onClick={() => {
-                            openModalDelete();
-                            setItemId(cell.row.original.product_id);
-                          }}
-                        >
-                          <FaTrashAlt />
-                        </button>
-                      </td>
-                    );
-                  } else
-                    return (
-                      <td key={cell.id} className="text-center">
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </td>
-                    );
-                })}
-              </tr>
-            ))}
+                          {/* Lugar aonde fica as tabelas */}
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      );
+                  })}
+                </tr>
+              );
+            })}
           </tbody>
           <tfoot>
             {table.getFooterGroups().map((footerGroup) => (
               <tr key={footerGroup.id}>
                 {footerGroup.headers.map((header) => (
                   <th key={header.id}>
-                    {flexRender(header.column.columnDef.footer, header.getContext())}
+                    {flexRender(
+                      header.column.columnDef.footer,
+                      header.getContext()
+                    )}
                   </th>
                 ))}
               </tr>
@@ -204,7 +248,10 @@ export default function Storage() {
   });
 
   async function selectProduct() {
-    const { data } = await supabase.from<Product>("product").select().throwOnError();
+    const { data } = await supabase
+      .from<Product>("product")
+      .select()
+      .throwOnError();
     return data;
   }
 
@@ -240,7 +287,9 @@ export default function Storage() {
     };
 
     try {
-      const { data, error } = await supabase.from("product").insert([newProduct]);
+      const { data, error } = await supabase
+        .from("product")
+        .insert([newProduct]);
       productNameRef.current.value = "";
       productPriceRef.current.value = "";
       productQuantityRef.current.value = "";
@@ -259,7 +308,10 @@ export default function Storage() {
       product_price: productPriceRef.current?.value,
     };
 
-    const { data, error } = await supabase.from("product").update(modified).match({ product_id });
+    const { data, error } = await supabase
+      .from("product")
+      .update(modified)
+      .match({ product_id });
     if (error) {
       return toast.error("Preencha algo valído");
     }
@@ -269,7 +321,10 @@ export default function Storage() {
   }
 
   async function deleteProduct(product_id: number | undefined) {
-    const { data, error } = await supabase.from("product").delete().match({ product_id });
+    const { data, error } = await supabase
+      .from("product")
+      .delete()
+      .match({ product_id });
     handleChange();
   }
 
@@ -280,13 +335,15 @@ export default function Storage() {
   }, []);
 
   return (
-    <main className="mt-10">
+    <main className="mt-20">
       <div className="flex justify-center text-white">
-        <section className="flex flex-col gap-10">
-          <h1 className="text-5xl mt-20 decoration-double font-medium text-center ">Estoque</h1>
+        <section className="flex flex-col gap-10 w-full">
+          <h1 className="text-5xl mt-20 decoration-double font-medium text-center">
+            Estoque
+          </h1>
           <TabelaEstoque />
           <div>
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center mb-20">
               <button
                 onClick={openModal}
                 className="border rounded-full px-3 py-4 bg-white text-black font-bold hover:scale-110 "
@@ -333,7 +390,11 @@ export default function Storage() {
                             className="flex justify-center flex-col gap-3"
                           >
                             <label>Nome:</label>
-                            <input className="btn_class" type="text" ref={productNameRef} />
+                            <input
+                              className="btn_class"
+                              type="text"
+                              ref={productNameRef}
+                            />
                             <label>Preço:</label>
                             <input
                               className="btn_class"
@@ -359,7 +420,12 @@ export default function Storage() {
                           onClick={closeModal}
                           className="absolute top-1 right-1 hover:bg-red-400 rounded-xl flex items-center"
                         >
-                          <Image width={24} height={24} src="/Close.svg" alt="Close modal" />
+                          <Image
+                            width={24}
+                            height={24}
+                            src="/Close.svg"
+                            alt="Close modal"
+                          />
                         </button>
                       </Dialog.Panel>
                     </Transition.Child>
@@ -371,7 +437,11 @@ export default function Storage() {
             {/* SEPARA MODAISSSSSSSSSSSSSSSSSSSSS */}
 
             <Transition appear show={isOpenDelete} as={Fragment}>
-              <Dialog as="div" className="relative z-10" onClose={closeModalDelete}>
+              <Dialog
+                as="div"
+                className="relative z-10"
+                onClose={closeModalDelete}
+              >
                 <Transition.Child
                   as={Fragment}
                   enter="ease-out duration-300"
@@ -396,7 +466,10 @@ export default function Storage() {
                       leaveTo="opacity-0 scale-95"
                     >
                       <Dialog.Panel className="w-[700px] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                        <Dialog.Title as="h3" className=" text-center font-bold text-[20px] ">
+                        <Dialog.Title
+                          as="h3"
+                          className=" text-center font-bold text-[20px] "
+                        >
                           Realmente deseja excluir?
                         </Dialog.Title>
                         <div className="mt-4 flex justify-center items-center font-bold gap-3">
@@ -422,7 +495,12 @@ export default function Storage() {
                           onClick={closeModalDelete}
                           className="absolute top-1 right-1 hover:bg-red-400 rounded-xl flex items-center"
                         >
-                          <Image width={24} height={24} src="/Close.svg" alt="Close modal" />
+                          <Image
+                            width={24}
+                            height={24}
+                            src="/Close.svg"
+                            alt="Close modal"
+                          />
                         </button>
                       </Dialog.Panel>
                     </Transition.Child>
@@ -434,7 +512,11 @@ export default function Storage() {
             {/* SEPARA MODAISSSSSSSSSSSSSSSSSSSSS */}
 
             <Transition appear show={isOpenUpdate} as={Fragment}>
-              <Dialog as="div" className="relative z-10" onClose={closeModalUpdate}>
+              <Dialog
+                as="div"
+                className="relative z-10"
+                onClose={closeModalUpdate}
+              >
                 <Transition.Child
                   as={Fragment}
                   enter="ease-out duration-300"
@@ -459,13 +541,20 @@ export default function Storage() {
                       leaveTo="opacity-0 scale-95"
                     >
                       <Dialog.Panel className="w-[700px] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                        <Dialog.Title as="h3" className=" text-center font-bold text-[20px] ">
+                        <Dialog.Title
+                          as="h3"
+                          className=" text-center font-bold text-[20px] "
+                        >
                           Editar dados
                         </Dialog.Title>
                         <div className="mt-4 flex justify-center items-center font-bold">
                           <div className="flex justify-center flex-col gap-3">
                             <label>Nome:</label>
-                            <input className="btn_class" type="text" ref={productNameRef} />
+                            <input
+                              className="btn_class"
+                              type="text"
+                              ref={productNameRef}
+                            />
                             <label>Preço:</label>
                             <input
                               className="btn_class"
@@ -481,7 +570,10 @@ export default function Storage() {
                               min="1"
                               ref={productQuantityRef}
                             />
-                            <button className="btn" onClick={() => updateProduct(itemId)}>
+                            <button
+                              className="btn"
+                              onClick={() => updateProduct(itemId)}
+                            >
                               Editar
                             </button>
                           </div>
@@ -491,7 +583,12 @@ export default function Storage() {
                           onClick={closeModalUpdate}
                           className="absolute top-1 right-1 hover:bg-red-400 rounded-xl flex items-center"
                         >
-                          <Image width={24} height={24} src="/Close.svg" alt="Close modal" />
+                          <Image
+                            width={24}
+                            height={24}
+                            src="/Close.svg"
+                            alt="Close modal"
+                          />
                         </button>
                       </Dialog.Panel>
                     </Transition.Child>
